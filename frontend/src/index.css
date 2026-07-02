@@ -1,0 +1,370 @@
+/* ==========================================================================
+   APPEALING APPARELS — senior-friendly redesign
+   Goals: large text, high contrast, big tap targets, calm & simple.
+   Mobile-first (portrait phones), then tablet/desktop.
+   ========================================================================== */
+
+:root {
+  /* Palette — high contrast monochrome */
+  --paper: #ffffff;
+  --ink: #111111;
+  --ink-soft: #333330;
+  --ink-faint: #565650;
+  --line: #c9c6bf;
+  --line-strong: #111111;
+  --stone: #f3f1ec;
+  --ink-invert: #ffffff;
+  --focus: #1456b8;
+
+  /* One clean, familiar sans for everything */
+  --font-display: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+
+  --track-label: 0.02em;
+  --track-nav: 0.02em;
+
+  --gutter: 18px;
+  --maxw: 1200px;
+  --header-h: 64px;
+  --tap: 52px;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+    --header-h: 72px;
+  }
+  body {
+    font-size: 19px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --gutter: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   PRODUCT PAGE (global classes) — enlarged & simplified
+   ========================================================================== */
+
+.product-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px var(--gutter) 48px;
+}
+
+.product-gallery {
+  position: relative;
+}
+.gallery-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--stone);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.gallery-viewport img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* plain arrows — no circle */
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 72px;
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: var(--ink);
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 5px #fff, 0 0 5px #fff, 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.gallery-arrow:active {
+  opacity: 0.55;
+}
+.gallery-prev {
+  left: 2px;
+}
+.gallery-next {
+  right: 2px;
+}
+
+.gallery-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+.gallery-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+.gallery-dot.active {
+  background: var(--ink);
+}
+.gallery-count {
+  text-align: center;
+  margin-top: 8px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.product-category {
+  margin-top: 1.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.product-page h1 {
+  font-size: 2rem;
+  margin-top: 0.5rem;
+}
+
+.product-price {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 0.75rem;
+}
+
+.product-description {
+  margin-top: 1.1rem;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1.65;
+}
+
+/* Hide the duplicate, unclassed description paragraph */
+.product-page > p:not([class]) {
+  display: none;
+}
+
+.size-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 1.6rem 0;
+}
+.size-btn {
+  min-width: 64px;
+  height: 64px;
+  padding: 0 14px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.size-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.product-page > button {
+  width: 100%;
+  min-height: 60px;
+  margin-top: 1.4rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: 2px solid var(--ink);
+}
+.product-page > button:active {
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   PRODUCT PAGE — two columns on laptop/desktop (photo left, content right).
+   On phones it stays single-column: image carousel first, content below.
+   ========================================================================== */
+@media (min-width: 1000px) {
+  .product-page {
+    max-width: 1160px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    column-gap: 56px;
+    align-items: start;
+    padding-top: 28px;
+  }
+
+  /* photo column on the left, sticky while the content scrolls */
+  .product-gallery {
+    grid-column: 1;
+    grid-row: 1 / span 999;
+    position: sticky;
+    top: calc(var(--header-h) + 20px);
+  }
+  .gallery-viewport {
+    aspect-ratio: auto;
+    height: min(80vh, 760px);
+  }
+
+  /* everything else flows down the right-hand column */
+  .product-category {
+    grid-column: 2;
+    margin-top: 0;
+  }
+  .product-page > h1 {
+    grid-column: 2;
+  }
+  .product-price {
+    grid-column: 2;
+  }
+  .product-description {
+    grid-column: 2;
+  }
+  .size-grid {
+    grid-column: 2;
+  }
+  .product-page > button {
+    grid-column: 2;
+  }
+}
+
+/* ==========================================================================
+   PRODUCT PAGE — back arrow wrapper + recommendations row
+   ========================================================================== */
+.product-back {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 16px var(--gutter) 0;
+}
+
+.recommend {
+  padding-top: 24px;
+  padding-bottom: 56px;
+}
+.recommend-title {
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  margin-bottom: 28px;
+}
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 14px;
+}
+@media (min-width: 768px) {
+  .recommend-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 22px;
+  }
+}
+@media (min-width: 1024px) {
+  .recommend-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 28px;
+  }
+}

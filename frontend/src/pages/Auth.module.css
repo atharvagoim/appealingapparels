@@ -1,0 +1,84 @@
+.page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 44px var(--gutter);
+}
+.card {
+  width: 100%;
+  max-width: 440px;
+}
+.eyebrow {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.title {
+  font-size: clamp(2rem, 8vw, 2.6rem);
+  margin-top: 8px;
+}
+.sub {
+  margin-top: 10px;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 26px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.input {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  padding: 15px 14px;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+.input:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.error {
+  background: #fbeaea;
+  color: #9a2b2b;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 12px 14px;
+  border: 2px solid #e3b8b8;
+}
+.submit {
+  margin-top: 4px;
+  min-height: 58px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.submit:disabled {
+  opacity: 0.55;
+}
+.alt {
+  margin-top: 24px;
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.alt a {
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink);
+}

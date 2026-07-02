@@ -1,0 +1,60 @@
+.section {
+  padding-top: 44px;
+  padding-bottom: 44px;
+}
+.shown {
+  opacity: 1;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 64px;
+}
+.title {
+  font-size: clamp(1.8rem, 8vw, 2.6rem);
+  margin-top: 6px;
+}
+.viewAll {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink);
+  white-space: nowrap;
+}
+
+/* simple grid — no horizontal scrolling to hunt through */
+.scroller {
+  overflow: visible;
+}
+.rail {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 14px;
+  padding-inline: var(--gutter);
+}
+.cell {
+  width: auto;
+}
+.endcap {
+  display: none; /* drop the decorative "see the full edit" card */
+}
+
+@media (min-width: 768px) {
+  .rail {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 22px;
+  }
+}
+@media (min-width: 1024px) {
+  .rail {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: var(--maxw);
+    margin: 0 auto;
+    gap: 40px 28px;
+  }
+}

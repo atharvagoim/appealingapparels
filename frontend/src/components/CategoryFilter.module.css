@@ -1,0 +1,41 @@
+.scroller {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin-inline: calc(-1 * var(--gutter));
+}
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+.rail {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  padding-inline: var(--gutter);
+}
+.chip {
+  flex: none;
+  min-height: 48px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0 18px;
+  white-space: nowrap;
+}
+.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+@media (min-width: 768px) {
+  .scroller {
+    overflow: visible;
+    margin-inline: 0;
+  }
+  .rail {
+    width: auto;
+    flex-wrap: wrap;
+    padding-inline: 0;
+  }
+}

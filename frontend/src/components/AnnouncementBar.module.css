@@ -1,0 +1,33 @@
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--ink);
+  color: var(--ink-invert);
+  padding: 10px 16px;
+  min-height: 40px;
+}
+.item {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.item:last-of-type,
+.dot {
+  display: none;
+}
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+@media (min-width: 600px) {
+  .item:last-of-type,
+  .dot {
+    display: block;
+  }
+}

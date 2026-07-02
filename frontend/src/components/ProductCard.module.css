@@ -1,0 +1,87 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--stone);
+  border: 1px solid var(--line);
+}
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* "New" tag — small */
+.badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+}
+
+/* best-seller number — removed */
+.rank {
+  display: none;
+}
+
+/* "View product" tag — removed */
+.quick {
+  display: none;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  padding-top: 14px;
+}
+.metaText {
+  min-width: 0;
+}
+.name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+.category {
+  margin-top: 5px;
+  font-size: 0.95rem;
+  color: var(--ink-faint);
+}
+.price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+/* On the narrowest phones (2 cards across), keep things tidy */
+@media (max-width: 420px) {
+  .name {
+    font-size: 1.05rem;
+  }
+  .price {
+    font-size: 1.05rem;
+  }
+}

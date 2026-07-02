@@ -1,0 +1,33 @@
+.section {
+  background: var(--paper);
+  padding-top: 44px;
+  padding-bottom: 48px;
+}
+.shown {
+  opacity: 1;
+}
+
+.head {
+  text-align: left;
+  margin-bottom: 64px;
+}
+.title {
+  font-size: clamp(1.9rem, 9vw, 3rem);
+  margin-top: 6px;
+}
+.note {
+  display: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 14px;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 28px;
+  }
+}

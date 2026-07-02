@@ -1,0 +1,202 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  height: var(--header-h);
+}
+
+/* ----- hamburger (large tap target) ----- */
+.icon {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--tap);
+  width: var(--tap);
+  margin-left: -10px;
+}
+.burger {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 16px;
+}
+.burger i {
+  position: absolute;
+  left: 0;
+  width: 28px;
+  height: 2.5px;
+  background: var(--ink);
+  transition: transform 0.32s var(--ease), opacity 0.2s var(--ease);
+}
+.burger i:first-child {
+  top: 0;
+}
+.burger i:last-child {
+  bottom: 0;
+}
+.burgerOpen i:first-child {
+  transform: translateY(6.7px) rotate(45deg);
+}
+.burgerOpen i:last-child {
+  transform: translateY(-6.7px) rotate(-45deg);
+}
+
+/* ----- brand ----- */
+.brand {
+  grid-column: 2;
+  justify-self: center;
+  display: flex;
+  gap: 0.4em;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.brandWord {
+  display: inline-block;
+}
+
+/* ----- desktop nav ----- */
+.deskNav {
+  display: none;
+}
+.deskLink {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  padding: 6px 2px;
+  border-bottom: 2px solid transparent;
+}
+.deskLink:hover {
+  border-bottom-color: var(--ink);
+}
+
+/* ----- right actions ----- */
+.actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.iconText {
+  display: none;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.bag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: var(--tap);
+  padding: 0 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.bagCount {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+/* ----- mobile drawer ----- */
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(86vw, 380px);
+  height: 100dvh;
+  background: var(--paper);
+  border-right: 2px solid var(--ink);
+  z-index: 60;
+  transform: translateX(-101%);
+  transition: transform 0.36s var(--ease);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--header-h) + 24px) 24px 28px;
+}
+.drawerOpen {
+  transform: translateX(0);
+}
+.drawerNav {
+  display: flex;
+  flex-direction: column;
+}
+.drawerLink {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  border-bottom: 1px solid var(--line);
+  padding: 18px 2px;
+  min-height: var(--tap);
+}
+.drawerIndex {
+  display: none; /* drop the tiny numeral, it just adds noise */
+}
+.drawerFoot {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  padding-top: 18px;
+}
+.drawerFoot a,
+.drawerFoot button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(17, 17, 17, 0.45);
+  border: 0;
+}
+
+@media (min-width: 1000px) {
+  .icon {
+    display: none;
+  }
+  .brand {
+    justify-self: start;
+    grid-column: 1;
+    font-size: 1.3rem;
+  }
+  .deskNav {
+    grid-column: 2;
+    justify-self: center;
+    display: flex;
+    gap: 30px;
+  }
+  .iconText {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+  .drawer,
+  .scrim {
+    display: none;
+  }
+}

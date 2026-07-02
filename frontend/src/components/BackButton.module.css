@@ -1,0 +1,17 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 4px 2px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.back:hover {
+  opacity: 0.7;
+}
+.arrow {
+  font-size: 1.5rem;
+  line-height: 1;
+}

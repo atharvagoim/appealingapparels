@@ -1,0 +1,104 @@
+.page {
+  padding: 24px var(--gutter) 56px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.title {
+  font-size: clamp(2rem, 9vw, 2.8rem);
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 8px;
+}
+.empty {
+  margin-top: 24px;
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+}
+.item {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.thumb {
+  width: 104px;
+  height: 132px;
+  object-fit: cover;
+  background: var(--stone);
+  border: 1px solid var(--line);
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.name {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.size {
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+.price {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+}
+.controls {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qty {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--ink);
+}
+.qty button {
+  width: 48px;
+  height: 48px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.qty span {
+  min-width: 44px;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.remove {
+  min-height: 48px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+.lineTotal {
+  grid-column: 2;
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 2px solid var(--ink);
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

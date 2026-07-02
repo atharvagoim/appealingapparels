@@ -1,0 +1,30 @@
+.btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+}
+
+/* small heart, black outline; soft light halo so it shows on darker images */
+.btn svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
+}
+
+/* saved = muted dark red (not bright) */
+.saved svg {
+  fill: #8f2d2d;
+  stroke: #8f2d2d;
+}
