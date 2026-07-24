@@ -1,0 +1,124 @@
+.page {
+  background: #f5f5f6;
+  min-height: 100vh;
+  padding: 12px 0 48px;
+}
+.inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0 22px;
+}
+.title {
+  font-size: clamp(1.5rem, 5vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.subCount {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.clear {
+  background: none;
+  border: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #6b6b6b;
+  cursor: pointer;
+}
+.clear:hover {
+  color: var(--ink);
+}
+
+/* product grid — 2 columns on phone, scaling up to 4 on laptop */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 14px;
+}
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 22px;
+  }
+}
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 28px;
+  }
+}
+
+.empty {
+  padding-top: 56px;
+  padding-bottom: 56px;
+  text-align: center;
+}
+.emptyTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.emptyBody {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+.emptyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 4px;
+  background: var(--ink);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* go to cart — centred at the bottom */
+.cartBtnWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 36px;
+}
+.cartBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  min-height: 52px;
+  padding: 0 28px;
+  border-radius: 4px;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.cartBtn:active {
+  opacity: 0.9;
+}
+
+/* fill more of the width on laptop */
+@media (min-width: 1000px) {
+  .inner {
+    max-width: none;
+  }
+}

@@ -1,0 +1,168 @@
+.section {
+  padding-top: 19px;
+  padding-bottom: 0px;
+}
+.head {
+  margin-bottom: 48px;
+  text-align: center;
+}
+.title {
+  font-size: clamp(1.750rem, 4.5vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  padding-bottom: 40px;
+}
+
+/* ---- slidable row (mobile + desktop) ---- */
+.wrap {
+  position: relative;
+}
+.track {
+  --gap: 22px;
+  --cols: 3;
+  display: flex;
+  gap: var(--gap);
+  /*
+   * Centre the row when the categories don't fill it — three categories in a
+   * six-wide track would otherwise hug the left edge. `safe center` falls back
+   * to flex-start once the content overflows, so a long list still scrolls
+   * from the beginning instead of being clipped at both ends.
+   */
+  justify-content: center;
+  justify-content: safe center;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  padding: 4px 2px 14px;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+/* size + count of circles per view — fills the row edge to edge instead of
+   leaving empty space, and scales the circle up/down with the screen */
+.cell {
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  transition: transform 0.2s var(--ease);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.circle {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--stone);
+  border: 1px solid var(--line);
+  transition: box-shadow 0.2s var(--ease);
+}
+.circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+}
+.label {
+  font-size: 1.180rem;
+  font-weight: 550;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+@media (hover: hover) {
+  .cell:hover {
+    transform: translateY(-3px);
+  }
+  .cell:hover .circle {
+    box-shadow: 0 8px 20px rgba(17, 17, 17, 0.15);
+  }
+}
+
+/* small tablets: 4 per view */
+@media (min-width: 560px) {
+  .track {
+    --gap: 30px;
+    --cols: 4;
+  }
+  .label {
+    font-size: 0.92rem;
+  }
+}
+
+/* laptop: 6 per view — fills the full row width with 6 categories */
+@media (min-width: 1000px) {
+  .section {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+  .head {
+    margin-bottom: 52px;
+  }
+  .track {
+    --gap: 42px;
+    --cols: 6;
+  }
+  .label {
+    font-size: 1rem;
+  }
+}
+
+/* hover arrows — laptop only, native swipe/scroll covers phone + tablet */
+.arrow {
+  display: none;
+}
+@media (min-width: 1000px) {
+  .arrow {
+    position: absolute;
+    top: 38%;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 0;
+    background: #ffffff;
+    color: var(--ink);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .wrap:hover .arrow {
+    opacity: 1;
+  }
+  .arrow:hover {
+    transform: scale(1.06);
+  }
+  .arrow:disabled {
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+  .left {
+    left: -14px;
+  }
+  .right {
+    right: -14px;
+  }
+}
+
+@media (max-width: 620px) {
+  .title {
+    font-size: 1.3rem;
+    padding-bottom: 22px;
+  }
+}

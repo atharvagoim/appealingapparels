@@ -1,0 +1,31 @@
+.stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #e8a317;
+  line-height: 1;
+}
+
+.picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pickBtn {
+  display: inline-flex;
+  padding: 2px;
+  border: 0;
+  background: none;
+  color: #d9d5cc;
+  cursor: pointer;
+  transition: color 0.12s, transform 0.12s;
+}
+.pickBtn:hover:not(:disabled) {
+  transform: scale(1.12);
+}
+.pickBtn:disabled {
+  cursor: default;
+}
+.pickOn {
+  color: #e8a317;
+}

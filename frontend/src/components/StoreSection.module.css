@@ -1,0 +1,123 @@
+.section {
+  padding-top: clamp(28px, 4vw, 44px);
+  padding-bottom: clamp(34px, 5vw, 52px);
+  --store-accent: var(--sale);
+}
+
+/* Sits within the page's normal width. Same two columns on a phone as on a
+   laptop — text left, map right — with everything scaling rather than
+   reflowing. */
+.card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  width: 100%;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+/* ---- left: text content ---- */
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(16px, 3.4vw, 56px) clamp(12px, 2.6vw, 40px)
+    clamp(16px, 3.4vw, 56px) 0;
+  min-width: 0;
+}
+.title {
+  font-size: clamp(1.02rem, 3.4vw, 2.6rem);
+  line-height: 1.15;
+  margin: 0 0 clamp(5px, 1vw, 12px);
+}
+.lede {
+  color: var(--ink-faint);
+  font-size: clamp(0.7rem, 1.4vw, 1rem);
+  line-height: 1.45;
+  margin: 0 0 clamp(12px, 2.4vw, 26px);
+  max-width: 34ch;
+}
+
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(9px, 1.7vw, 18px);
+  margin-bottom: clamp(14px, 2.8vw, 30px);
+}
+.infoRow {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(8px, 1.3vw, 14px);
+  min-width: 0;
+}
+.infoIcon {
+  flex: none;
+  width: clamp(26px, 4vw, 44px);
+  height: clamp(26px, 4vw, 44px);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--store-accent) 12%, var(--paper));
+  color: var(--store-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.infoIconSvg {
+  width: clamp(14px, 2vw, 22px);
+  height: clamp(14px, 2vw, 22px);
+}
+.infoTitle {
+  font-weight: 700;
+  font-size: clamp(0.74rem, 1.5vw, 1.02rem);
+  line-height: 1.3;
+  margin: 0 0 2px;
+  overflow-wrap: anywhere;
+}
+.infoSub {
+  color: var(--ink-faint);
+  font-size: clamp(0.68rem, 1.35vw, 0.92rem);
+  line-height: 1.4;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Sized to its label rather than carrying a fixed 24px gutter each side. */
+.directionsBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: clamp(5px, 0.8vw, 10px);
+  min-height: clamp(34px, 4.2vw, 50px);
+  padding: 0 clamp(10px, 1.4vw, 18px);
+  border-radius: var(--r-md);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: clamp(0.58rem, 1.15vw, 0.86rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.directionsBtn svg {
+  flex: none;
+  width: clamp(12px, 1.5vw, 17px);
+  height: clamp(12px, 1.5vw, 17px);
+}
+
+/* ---- right: real embedded map ---- */
+.mapPanel {
+  position: relative;
+  min-height: clamp(190px, 30vw, 460px);
+  overflow: hidden;
+  background: #eceeef;
+}
+.mapFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}

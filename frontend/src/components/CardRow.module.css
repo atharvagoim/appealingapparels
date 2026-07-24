@@ -1,0 +1,80 @@
+.wrap {
+  position: relative;
+}
+
+/* the scrolling row */
+/* phones: a 2x2 grid of exactly 4 products, then the View all button */
+.track {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 14px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+.cell {
+  min-width: 0;
+}
+.cell:nth-child(n + 5) {
+  display: none;
+}
+
+/* hover arrows — laptop only */
+.arrow {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  /* laptops: back to the scrolling carousel, 4 per view, arrows reveal the rest */
+  .track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 4px;
+  }
+  .cell {
+    flex: 0 0 calc((100% - 60px) / 4);
+    scroll-snap-align: start;
+  }
+  .cell:nth-child(n + 5) {
+    display: block;
+  }
+
+  .arrow {
+    position: absolute;
+    top: 38%;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 0;
+    background: #ffffff;
+    color: var(--ink);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .wrap:hover .arrow {
+    opacity: 1;
+  }
+  .arrow:hover {
+    transform: scale(1.06);
+  }
+  .arrow:disabled {
+    opacity: 0 !important;
+    pointer-events: none;
+  }
+  .left {
+    left: -14px;
+  }
+  .right {
+    right: -14px;
+  }
+}

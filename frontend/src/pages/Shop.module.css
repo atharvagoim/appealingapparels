@@ -1,0 +1,150 @@
+.page {
+  padding-top: 24px;
+  padding-bottom: 56px;
+}
+.head {
+  padding-bottom: 20px;
+}
+.title {
+  font-size: clamp(2rem, 9vw, 2.8rem);
+  margin-top: 8px;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 22px;
+}
+.countRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.count {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.clearAll {
+  min-height: 44px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+/* two products across on phones → more as space allows */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 14px;
+  padding-top: 0px;
+}
+
+.empty {
+  padding-top: 56px;
+  padding-bottom: 56px;
+  text-align: center;
+}
+.emptyTitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+.emptyBody {
+  margin: 12px auto 0;
+  max-width: 40ch;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+.emptyBtn {
+  display: inline-block;
+  margin-top: 22px;
+  min-height: 56px;
+  line-height: 56px;
+  padding: 0 30px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 22px;
+  }
+}
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 28px;
+  }
+}
+
+/* sort + on-sale controls */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.sortField {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sortLabel {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.sortSelect {
+  min-height: 48px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0 14px;
+}
+.sortSelect:focus {
+  outline: 0px solid var(--focus);
+  outline-offset: 0px;
+}
+.saleToggle {
+  min-height: 48px;
+  padding: 0 18px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.saleOn {
+  background: #b12704;
+  border-color: #b12704;
+  color: #fff;
+}
+
+/* replaced by the Filter & Sort panel on all screen sizes */
+.desktopTools {
+  display: none;
+}
+
+/* Collection banner heading — New Arrivals, Best Sellers, Sale. */
+.collectionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 8vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-align: center;
+  margin: clamp(10px, 2vw, 22px) 0 clamp(14px, 2.4vw, 26px);
+}
+.collectionSale {
+  color: var(--sale);
+}

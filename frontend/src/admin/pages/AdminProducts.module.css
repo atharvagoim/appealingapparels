@@ -1,0 +1,237 @@
+/* ---- search + filters card ---- */
+.toolCard {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  color: var(--ink-faint);
+  pointer-events: none;
+}
+.searchAdorn {
+  position: absolute;
+  right: 16px;
+  color: var(--ink-faint);
+  pointer-events: none;
+}
+.search {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #d6d3cc;
+  border-radius: 12px;
+  background: var(--paper);
+  padding: 0 46px;
+  font-size: 0.98rem;
+  color: var(--ink);
+}
+.search:focus {
+  outline: none;
+  border-color: #b9b6ae;
+}
+.search::placeholder {
+  color: var(--ink-faint);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.categorySelectWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.categorySelectLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.categorySelect {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d6d3cc;
+  border-radius: 12px;
+  background: var(--paper);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+}
+.chip {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: border-color 0.14s, background 0.14s, color 0.14s;
+}
+.chip:hover {
+  border-color: var(--ink);
+}
+.chipOn,
+.chipOn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.resultCount {
+  font-size: 0.9rem;
+  color: var(--ink-faint);
+}
+
+/* ---- product cards ---- */
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  transition: border-color 0.14s, box-shadow 0.14s;
+}
+.card:hover {
+  border-color: #d7d4cd;
+  box-shadow: 0 6px 18px rgba(17, 17, 17, 0.05);
+}
+.thumb {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #edeef1;
+}
+.cardMain {
+  flex: 1;
+  min-width: 0;
+}
+.name {
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.meta {
+  margin-top: 4px;
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.code {
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: none;
+}
+.price {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.badge {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badgeIn {
+  background: #e7f4ea;
+  color: #1e6b34;
+}
+.badgeLow {
+  background: #fbf3e6;
+  color: #7a5713;
+}
+.badgeOut {
+  background: #fbeaea;
+  color: #9a2b2b;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+}
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.14s, color 0.14s, background 0.14s;
+}
+.iconBtn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.iconDanger {
+  color: #c0392b;
+}
+.iconDanger:hover {
+  border-color: #c0392b;
+  color: #c0392b;
+  background: #fbeaea;
+}
+
+/* ---- empty ---- */
+.empty {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+}
+.emptyTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.emptyBody {
+  margin-top: 6px;
+  color: var(--ink-soft);
+}
+
+/* ---- mobile: stack the right-hand meta under the name ---- */
+@media (max-width: 620px) {
+  .card {
+    flex-wrap: wrap;
+  }
+  .right {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+    padding-left: 80px;
+  }
+}

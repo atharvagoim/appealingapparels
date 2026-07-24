@@ -1,0 +1,32 @@
+.btn {
+  position: absolute;
+  /* Centred on the discount tag opposite it: the tag runs 8px→26px, so a
+     22px control starts at 6px to share the same midline. */
+  top: 6px;
+  right: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+}
+
+/* small heart, black outline, no shadow */
+.btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.2;
+}
+
+/* saved = solid ink, filled in */
+.saved svg {
+  fill: var(--ink);
+  stroke: var(--ink);
+}

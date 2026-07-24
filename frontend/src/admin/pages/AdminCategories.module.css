@@ -1,0 +1,335 @@
+/* ---- page head extras ---- */
+.resetBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.resetBtn:hover {
+  background: #f6f6f4;
+}
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ---- category rows ---- */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 14px 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.row:hover {
+  border-color: #d8d8d4;
+  box-shadow: 0 4px 14px rgba(17, 17, 17, 0.08);
+  transform: translateY(-1px);
+}
+.rowOn {
+  border-color: #f4551f;
+  box-shadow: 0 0 0 1px #f4551f;
+}
+.rowOn:hover {
+  box-shadow: 0 0 0 1px #f4551f, 0 4px 14px rgba(17, 17, 17, 0.08);
+}
+.rowDragging {
+  opacity: 0.4;
+}
+.rowDragOver {
+  border-color: #b9b6ae;
+  box-shadow: 0 -3px 0 #b9b6ae;
+}
+.thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #edeef1;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.thumb img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.thumbEmpty {
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--ink-faint, #6a6a6a);
+}
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.info strong {
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.info span {
+  font-size: 0.8rem;
+  color: var(--ink-faint, #6a6a6a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.iconBtnSm {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid #d6d3cc;
+  background: var(--paper);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.iconBtnSm:hover {
+  background: #f6f6f4;
+  border-color: #b9b6ae;
+}
+.iconBtnDanger {
+  color: #c0392b;
+  border-color: #f3d3ce;
+  background: #fdf3f1;
+}
+.iconBtnDanger:hover {
+  background: #fbe6e2;
+  border-color: #eab8b0;
+}
+.dragHandle {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  color: var(--ink-faint, #6a6a6a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dragHandle:hover {
+  background: #f6f6f4;
+  color: var(--ink);
+}
+.dragHandle:active {
+  cursor: grabbing;
+  background: #eeeeec;
+}
+
+/* ---- modal editor ---- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(17, 17, 17, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal {
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--paper);
+  border-radius: 16px;
+  padding: 26px;
+}
+.modalHead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.modalThumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #edeef1;
+  flex: none;
+}
+.modalThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.modalTitleWrap {
+  flex: 1;
+  min-width: 0;
+}
+.modalTitleWrap strong {
+  display: block;
+  font-size: 1.05rem;
+}
+.modalTitleWrap span {
+  font-size: 0.82rem;
+  color: var(--ink-faint, #6a6a6a);
+}
+.modalClose {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.modalClose:hover {
+  background: #f6f6f4;
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.modalField > span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft, #333);
+}
+.modalInputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.modalInputWrap input,
+.modalInputWrap select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 40px 0 14px;
+  border: 1px solid #d6d3cc;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: var(--paper);
+  appearance: none;
+}
+.modalInputWrap.iconLeft input {
+  padding: 0 14px 0 40px;
+}
+.modalIcon {
+  position: absolute;
+  right: 14px;
+  color: var(--ink-faint, #6a6a6a);
+  pointer-events: none;
+  display: flex;
+}
+.modalInputWrap.iconLeft .modalIcon {
+  right: auto;
+  left: 14px;
+}
+
+.cropLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft, #333);
+  margin-bottom: 10px;
+}
+
+.modalFoot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 18px;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.modalMoveBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.modalMoveBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.modalRemove {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #c0392b;
+  cursor: pointer;
+}

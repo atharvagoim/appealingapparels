@@ -1,0 +1,126 @@
+.section {
+  --social-accent: #1a53e3;
+  padding: clamp(48px, 7vw, 110px) 0;
+}
+
+/* Full-bleed band, two columns at every width — same as its sibling sections. */
+.band {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(20px, 4vw, 72px);
+  width: 100%;
+  padding-inline: clamp(16px, 5vw, 96px);
+}
+
+/* ------------------------------------------------ left: the pitch */
+.content {
+  min-width: 0;
+}
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(38px, 5.4vw, 72px);
+  height: clamp(38px, 5.4vw, 72px);
+  margin-bottom: clamp(14px, 2.4vw, 34px);
+  border-radius: clamp(9px, 1.3vw, 18px);
+  background: var(--social-accent);
+  color: #ffffff;
+}
+.mark svg {
+  width: clamp(20px, 2.6vw, 34px);
+  height: clamp(20px, 2.6vw, 34px);
+}
+.title {
+  /* Set tight and heavy, like the reference — two lines on most widths. */
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 5.4vw, 4.4rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.lede {
+  margin-top: clamp(10px, 1.6vw, 24px);
+  max-width: 26ch;
+  font-size: clamp(0.76rem, 1.35vw, 1.15rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------- right: proof points and the call to action */
+.aside {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.6vw, 40px);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 clamp(4px, 1vw, 16px);
+  text-align: center;
+  min-width: 0;
+}
+/* Hairline dividers between the three, but not on the outer edges. */
+.stat + .stat {
+  border-left: 1px solid var(--line);
+}
+.statIcon {
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.statIcon svg {
+  width: clamp(18px, 2vw, 27px);
+  height: clamp(18px, 2vw, 27px);
+}
+.statValue {
+  font-size: clamp(0.8rem, 1.35vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.statLabel {
+  font-size: clamp(0.68rem, 1.1vw, 0.95rem);
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(44px, 5vw, 76px);
+  padding: 0 clamp(12px, 2vw, 28px);
+  border-radius: var(--r-md);
+  background: var(--social-accent);
+  color: #ffffff;
+  font-size: clamp(0.7rem, 1.25vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.2;
+  transition: filter 0.16s var(--ease);
+}
+.cta:hover {
+  filter: brightness(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta {
+    transition: none;
+  }
+}

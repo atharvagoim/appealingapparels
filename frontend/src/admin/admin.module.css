@@ -1,0 +1,795 @@
+/* Shared building blocks for admin pages. Imported per page. */
+
+.pageHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.pageTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.8rem, 6vw, 2.3rem);
+}
+.pageSub {
+  margin-top: 6px;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+.headActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--ink-invert);
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  border: 1px solid var(--ink);
+  transition: opacity 0.2s var(--ease);
+}
+.btn:hover {
+  opacity: 0.88;
+}
+.btnGhost {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btnGhost:hover {
+  border-color: var(--ink);
+  opacity: 1;
+}
+.btnDanger {
+  background: var(--paper);
+  color: #9a2b2b;
+  border-color: #d9b8b8;
+}
+.btnDanger:hover {
+  background: #9a2b2b;
+  color: var(--paper);
+  opacity: 1;
+}
+
+/* stat cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.stat {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+}
+.statLabel {
+  font-size: 10.5px;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.statValue {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* panel / card surface */
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.panelHead {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* product rows (mobile cards / desktop table-like) */
+.list {
+  display: flex;
+  flex-direction: column;
+}
+.row {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.rowMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.thumb {
+  width: 56px;
+  height: 72px;
+  object-fit: cover;
+  background: #edeef1;
+}
+.rowName {
+  font-family: var(--font-display);
+  font-size: 15px;
+}
+.rowMeta {
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.rowStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.low {
+  color: #9a2b2b;
+}
+.rowActions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: right;
+}
+.linkBtn {
+  font-size: 11px;
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid transparent;
+}
+.linkBtn:hover {
+  border-bottom-color: var(--ink);
+}
+.linkDanger {
+  color: #9a2b2b;
+}
+
+/* empty state */
+.empty {
+  background: var(--paper);
+  border: 1px dashed var(--line);
+  padding: 56px 24px;
+  text-align: center;
+}
+.emptyTitle {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+}
+.emptyBody {
+  margin: 10px auto 0;
+  max-width: 42ch;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+@media (min-width: 700px) {
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .rowMain {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .rowStats {
+    margin-top: 0;
+  }
+  .rowActions {
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
+/* ============================================================
+   Phase: admin polish + product toolbar + cover manager
+   ============================================================ */
+
+/* refined buttons to match the storefront */
+.btn {
+  min-height: 48px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0 20px;
+  border: 2px solid var(--ink);
+}
+.btnGhost {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.pageTitle {
+  font-size: clamp(1.8rem, 6vw, 2.3rem);
+}
+.pageSub {
+  font-size: 1rem;
+}
+
+/* product search + filters toolbar */
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.stockTabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.stockTab {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.stockTabOn {
+  background: var(--ink);
+  color: var(--paper);
+}
+.resultCount {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+/* add-image row (cover manager) */
+.addBox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.addInput {
+  flex: 1;
+  min-height: 52px;
+  border: 1px solid #d6d3cc;
+  background: var(--paper);
+  padding: 0 14px;
+  font-size: 1rem;
+  border-radius: 12px;
+}
+.addInput:focus {
+  outline: 0px solid var(--focus);
+  outline-offset: 0px;
+  border-color: #b9b6ae;
+}
+
+/* cover image grid */
+.coverGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.coverCard {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  overflow: hidden;
+  border-radius: 12px;
+  transition: border-color 0.15s;
+}
+.coverCardOpen {
+  border-color: var(--ink);
+}
+
+/* collapsed summary row (used by cover images + categories) — click to
+   expand into the full editor. Keeps a long list scannable instead of
+   showing every crop tool at once. */
+.rowSummary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+}
+.rowThumb {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #edeef1;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rowThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rowThumbEmpty {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.rowText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rowTitle {
+  font-weight: 700;
+  font-size: 0.96rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowSub {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowChevron {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  transition: transform 0.15s, background 0.15s;
+}
+.coverCardOpen .rowChevron,
+.catCardOpen .rowChevron {
+  background: var(--ink);
+  color: var(--paper);
+  transform: rotate(45deg);
+}
+.rowBody {
+  padding: 4px 16px 18px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.coverImg {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: #edeef1;
+}
+.coverBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
+}
+.coverNum {
+  font-weight: 700;
+}
+.coverActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.iconBtn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.iconBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (min-width: 600px) {
+  .addBox {
+    flex-direction: row;
+  }
+}
+@media (min-width: 700px) {
+  .toolbar {
+    padding: 18px;
+  }
+}
+@media (min-width: 900px) {
+  .coverGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---- category editor ---- */
+.catList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.catCard {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.catCardOpen {
+  border-color: var(--ink);
+}
+.catPreview {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #edeef1;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.catPreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.catPlaceholder {
+  font-size: 0.9rem;
+  color: var(--ink-faint);
+}
+.catFields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.catField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.catLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.catInput {
+  min-height: 48px;
+  border: 1px solid #d6d3cc;
+  background: var(--paper);
+  padding: 0 12px;
+  font-size: 1rem;
+  border-radius: 12px;
+}
+.catInput:focus {
+  outline: 0px solid var(--focus);
+  outline-offset: 0px;
+  border-color: #b9b6ae;
+}
+.catActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+@media (min-width: 700px) {
+  .catCard {
+    grid-template-columns: 240px 1fr;
+    align-items: start;
+  }
+}
+
+/* clickable "Out of stock · Restock" in the product list */
+.restock {
+  color: #b12704;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 40px;
+}
+.restock:hover {
+  opacity: 0.75;
+}
+
+/* clickable stock status in the "Needs attention" list */
+.stockLink {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.stockLink:hover {
+  opacity: 0.75;
+}
+
+/* ---- store photo croppers ---- */
+.storeList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.storeCard {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  padding: 16px;
+}
+.storeCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.cropPair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+.cropEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cropLabel2 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.cropBox {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #edeef1;
+  border: 2px solid var(--ink);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.cropBox:focus-visible {
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.18);
+}
+.cropBox:active {
+  cursor: grabbing;
+}
+.cropBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+.cropEmpty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+}
+.cropZoom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.cropZoom input[type="range"] {
+  flex: 1;
+  accent-color: var(--ink);
+}
+
+@media (min-width: 720px) {
+  .cropPair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* order status dropdown */
+.select {
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid #d6d3cc;
+  border-radius: 12px;
+  background: var(--paper);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* ---- generic on/off switch, reusable across admin pages ---- */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+}
+.toggleRow:not(:last-child) {
+  border-bottom: 1px solid var(--line);
+}
+.toggleText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.toggleText strong {
+  font-size: 0.95rem;
+}
+.toggleSub {
+  font-size: 0.85rem;
+  color: var(--ink-faint, #6a6a6a);
+}
+.toggle {
+  flex: none;
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #e4e4e4;
+  padding: 2px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.toggleKnob {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease;
+}
+.toggleOn {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.toggleOn .toggleKnob {
+  transform: translateX(20px);
+}
+
+/* ---- colour swatch input (native <input type="color"> + hex readout) ---- */
+.colorField {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.colorField:not(:last-child) {
+  margin-right:5px;
+}
+.colorSwatch {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+}
+.colorHex {
+  min-height: 36px;
+  width: 90px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+/* ---- taglines list editor ---- */
+.taglineRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.taglineRow .catInput {
+  flex: 1;
+}
+
+/* ---- gradient preset swatches ---- */
+.gradientGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.gradientSwatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 1px var(--line);
+  cursor: pointer;
+  padding: 0;
+}
+.gradientSwatch:hover {
+  transform: scale(1.08);
+}
+.gradientSwatchOn {
+  border-color: var(--paper);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+/* Small square delete button — icon only, light grey until you reach for it. */
+.deleteIconBtn {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #d6d3cc;
+  border-radius: 12px;
+  background: var(--paper);
+  color: #b12704;
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s, color 0.14s;
+}
+.deleteIconBtn:hover {
+  background: #fdeaea;
+  border-color: #e0b4b4;
+  color: #8f1f03;
+}

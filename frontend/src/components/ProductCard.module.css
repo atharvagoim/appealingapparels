@@ -1,0 +1,226 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  /* Square on every screen — the phone rounding is gone too. */
+  border-radius: 0;
+  background: var(--stone);
+  border: 0;
+}
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* "New" tag — small */
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 3px;
+  background: rgba(17, 17, 17, 0.72);
+  color: #ffffff;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Discount flag — sits over the top-left of the photo. */
+.saveTag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 6px;
+  border-radius: 2px;
+  background: var(--sale);
+  color: #ffffff;
+  /* Matches the price line — same family, weight and figure style. */
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+/* best-seller number — removed */
+.rank {
+  display: none;
+}
+
+/* "View product" tag — removed */
+.quick {
+  display: none;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding-top: 14px;
+  padding-left: 6px;
+}
+.nameRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.quickViewBtn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 50%;
+  border: 0;
+  background: var(--ink);
+  color: #ffffff;
+  cursor: pointer;
+}
+.quickViewText {
+  display: none;
+}
+@media (min-width: 1000px) {
+  .quickViewBtn {
+    width: auto;
+    height: 26px;
+    padding: 0 11px;
+    border-radius: 999px;
+  }
+  .quickViewText {
+    display: inline;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+}
+.metaText {
+  min-width: 0;
+}
+.name {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.84rem;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.category {
+  font-size: 0.95rem;
+  color: var(--ink-faint);
+}
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.price {
+  font-size: 0.88rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.salePrice {
+  font-size: 0.88rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--sale);
+}
+.original {
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #a3a3a3;
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+/* On the narrowest phones (2 cards across), keep things tidy */
+@media (max-width: 420px) {
+  .name {
+    font-size: 0.76rem;
+  }
+  .price,
+  .salePrice {
+    font-size: 0.78rem;
+  }
+  .original {
+    font-size: 0.78rem;
+  }
+}
+
+/* ---- sold out ---- */
+/* Sits where the discount tag would, since the two never appear together. */
+.soldTag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 2px;
+  background: rgba(60, 60, 60, 0.82);
+  color: #ffffff;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+
+
+/* ---- hover: swap to second image ---- */
+.imgMain,
+.imgHover {
+  position: absolute;
+  inset: 0;
+}
+.imgHover {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+@media (hover: hover) {
+  .frame:hover .imgHover {
+    opacity: 1;
+  }
+}
+
+/* Colourway suffix when the grid splits a product into one card per colour. */
+.colourName {
+  color: var(--ink-faint);
+  font-weight: 400;
+}

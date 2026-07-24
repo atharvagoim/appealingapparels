@@ -1,0 +1,100 @@
+.section {
+  padding-top: 44px;
+  padding-bottom: 44px;
+}
+
+/* Three columns — spacer, centred title, link — so the heading is truly
+   centred rather than offset by the width of the link beside it. */
+.head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  margin-bottom: 64px;
+}
+.head::before {
+  content: "";
+}
+.headText {
+  min-width: 0;
+}
+.title {
+  font-size: clamp(1.8rem, 8vw, 2.6rem);
+  margin-top: 6px;
+}
+.subtitle {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink-faint);
+}
+
+.viewAll {
+  justify-self: end;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.viewAllWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+.viewAllBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 40px;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* The heading row carries the link on laptops; phones get the button below. */
+@media (min-width: 1000px) {
+  .viewAllWrap {
+    display: none;
+  }
+}
+@media (max-width: 999px) {
+  .viewAll {
+    display: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .head {
+    grid-template-columns: 1fr;
+    margin-bottom: 28px;
+  }
+  .viewAll {
+    justify-self: center;
+  }
+  .head::before {
+    display: none;
+  }
+  .title {
+    font-size: 1.3rem;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+  }
+  .viewAllBtn {
+    min-height: 36px;
+    padding: 0 18px;
+    font-size: 0.7rem;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+  .viewAllWrap {
+    margin-top: 28px;
+  }
+}

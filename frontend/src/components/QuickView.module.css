@@ -1,0 +1,533 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(17, 17, 17, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+@media (min-width: 1000px) {
+  .overlay {
+    align-items: center;
+    padding: 24px;
+  }
+}
+
+/* ============================== phone (bottom sheet) ============================== */
+.sheetWrap {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.sheet {
+  position: relative;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--paper);
+  border-radius: 4px 4px 0 0;
+  animation: qvSlideUp 0.25s var(--ease);
+}
+@keyframes qvSlideUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.close {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: none;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  padding-right: 6px;
+  cursor: pointer;
+}
+
+/* gallery: ~2.5 photos visible at once, swipe for the rest */
+.gallery {
+  padding: 14px 14px 2px;
+}
+.track {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  touch-action: pan-x;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+.slide {
+  flex: 0 0 40%;
+  scroll-snap-align: start;
+  aspect-ratio: 3 / 4;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--stone);
+}
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.body {
+  padding: 14px 18px 22px;
+}
+.name {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.price,
+.salePrice {
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.original {
+  font-size: 0.88rem;
+  color: #8a8a85;
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+.percent {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--sale);
+}
+
+.sizeHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.sizeHeadLabel {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.sizeChartLink {
+  background: none;
+  border: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink-faint, #6a6a6a);
+  cursor: pointer;
+}
+
+.sizeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.sizeChip {
+  min-width: 46px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+}
+.sizeChipOn {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #ffffff;
+}
+.sizeChipOff {
+  color: #c2c2c2;
+  border-color: #ececec;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.detailsLink {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-faint, #6a6a6a);
+  margin-bottom: 10px;
+}
+.addBtn {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 4px;
+  border: 0;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.addBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.soldOut {
+  font-weight: 700;
+  color: #9a2b2b;
+  margin-bottom: 18px;
+}
+
+/* ============================== laptop (centred dialog) ============================== */
+.dCard {
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  max-height: 84vh;
+  overflow: hidden;
+  background: var(--paper);
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  animation: qvFadeIn 0.2s var(--ease);
+}
+@keyframes qvFadeIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.dClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.dImageCol {
+  position: relative;
+  background: var(--stone);
+}
+.dImageFrame {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  touch-action: pan-x;
+}
+.dImageFrame::-webkit-scrollbar {
+  display: none;
+}
+.dSlide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  height: 100%;
+}
+.dSlide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.dDots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  pointer-events: none;
+}
+.dDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 1px rgba(17, 17, 17, 0.15);
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: width 0.15s, background 0.15s;
+}
+.dDotOn {
+  width: 18px;
+  border-radius: 3px;
+  background: #ffffff;
+}
+
+.dBody {
+  padding: 40px 44px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.dName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.dSizeHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.dSizeLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.dSizeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+.dSizeChip {
+  min-width: 54px;
+  min-height: 46px;
+  padding: 0 12px;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+.dSizeChipOn {
+  border-color: var(--ink);
+  border-width: 2px;
+}
+.dSizeChipOff {
+  color: #c2c2c2;
+  border-color: #ececec;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.dQtyRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  width: fit-content;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 8px 18px;
+  margin-bottom: 26px;
+}
+.dQtyBtn {
+  background: none;
+  border: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  line-height: 1;
+}
+.dQtyValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  min-width: 12px;
+  text-align: center;
+}
+
+.dAddBtn {
+  min-height: 54px;
+  border-radius: 4px;
+  border: 0;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.dAddBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.dViewDetails {
+  align-self: flex-start;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+/* ============================== size chart (both layouts) ============================== */
+.chartOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  background: rgba(17, 17, 17, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.chartCard {
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 20px;
+}
+.chartHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.chartHead h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+.chartClose {
+  background: none;
+  border: 0;
+  font-size: 1.1rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+.chartImage {
+  width: 100%;
+  border-radius: 3px;
+  display: block;
+}
+.chartTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.chartTable th,
+.chartTable td {
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.chartNote {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: var(--ink-faint, #6a6a6a);
+  line-height: 1.4;
+}
+
+/* ---- colourway picker ---- */
+.qvColourRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.qvColour {
+  position: relative;
+  width: 40px;
+  height: 50px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.14s var(--ease);
+}
+.qvColour img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.qvSwatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.qvColour:hover {
+  border-color: #a8a8a8;
+}
+.qvColourOn {
+  border: 1.5px solid var(--ink);
+  outline: 2px solid var(--paper);
+  outline-offset: -4px;
+}
+/* Sold-out colours stay selectable so the shopper can see what's gone. */
+.qvColourOut {
+  opacity: 0.5;
+}
+.qvColourOut::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 0.5px),
+    #9a9a9a 50%,
+    transparent calc(50% + 0.5px)
+  );
+}

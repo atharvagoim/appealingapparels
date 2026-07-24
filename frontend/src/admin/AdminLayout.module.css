@@ -1,0 +1,288 @@
+.shell {
+  min-height: 100vh;
+  background: #edeef1;
+}
+
+/* ---------- sidebar (desktop) ---------- */
+.sidebar {
+  display: none;
+}
+
+.brand {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 2px 2px 6px;
+}
+.brandMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111111;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.brandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.brandTop {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.brandSub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 22px;
+  /* There are enough sections now that the list can outgrow a laptop screen,
+     so the nav scrolls while the brand and account block stay put. */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  /* Room for the scrollbar so it never sits on top of the labels. */
+  padding-right: 4px;
+  margin-right: -4px;
+}
+.nav::-webkit-scrollbar {
+  width: 6px;
+}
+.nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.nav::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+.nav > * {
+  flex: none;
+}
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.66);
+  border-radius: 10px;
+  transition: background 0.16s var(--ease), color 0.16s var(--ease);
+}
+.navIcon {
+  display: inline-flex;
+  color: currentColor;
+}
+.navLink:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+.navActive,
+.navActive:hover {
+  background: #ffffff;
+  color: #111111;
+}
+.navActive .navIcon {
+  color: #111111;
+}
+
+.sideFoot {
+  flex: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.viewStore {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  transition: border-color 0.16s, background 0.16s;
+}
+.viewStore:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+.userName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+.userEmail {
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.userChev {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.5);
+  flex: none;
+}
+
+/* ---------- mobile top bar ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 56px;
+  padding: 0 16px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.menuBtn {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 28px;
+  height: 28px;
+}
+.menuBtn span {
+  height: 1.5px;
+  width: 20px;
+  background: var(--ink);
+}
+.topBrand {
+  font-size: 11px;
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+}
+
+/* ---------- mobile drawer (dark, matches sidebar) ---------- */
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  width: min(80vw, 320px);
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #111111;
+  padding: 18px;
+  transform: translateX(-101%);
+  transition: transform 0.36s var(--ease);
+}
+.drawerOpen {
+  transform: translateX(0);
+}
+.drawerHead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.close {
+  font-size: 16px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.7);
+}
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(17, 17, 17, 0.5);
+}
+
+/* ---------- main ---------- */
+.main {
+  padding: 20px 16px 64px;
+}
+
+/* ---------- desktop ---------- */
+@media (min-width: 900px) {
+  .shell {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+  }
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    padding: 24px 18px;
+    background: #111111;
+  }
+  .topbar,
+  .drawer,
+  .scrim {
+    display: none;
+  }
+  /* Every admin page runs the full width of the shell — these are dense,
+     table-heavy screens, not reading pages. */
+  .main {
+    padding: 40px;
+    max-width: none;
+  }
+}

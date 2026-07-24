@@ -1,0 +1,449 @@
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.cardHeadText {
+  min-width: 0;
+}
+.addBtn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid var(--ink);
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.14s;
+}
+.addBtn:hover {
+  opacity: 0.86;
+}
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 3px;
+}
+.cardSub {
+  font-size: 0.85rem;
+  color: var(--ink-faint, #6a6a6a);
+  margin: 0;
+}
+
+.emptyNote {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #f4f5f7;
+  font-size: 0.85rem;
+  color: var(--ink-faint, #6a6a6a);
+}
+
+/* ---- draggable product card grid ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.productCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--paper);
+  cursor: grab;
+  transition: border-color 0.15s, opacity 0.15s;
+}
+.productCard:active {
+  cursor: grabbing;
+}
+.dragging {
+  opacity: 0.35;
+}
+.dragOver {
+  border-color: var(--ink);
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+.thumb {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: #edeef1;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+.name {
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.posBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(17, 17, 17, 0.72);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dragHandle {
+  position: absolute;
+  top: 8px;
+  right: 38px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #b12704;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+}
+.removeBtn:hover:not(:disabled) {
+  background: #b12704;
+  color: #fff;
+}
+.removeBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---- add-a-product picker ---- */
+.pickerOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(17, 17, 17, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.pickerCard {
+  width: min(520px, 100%);
+  max-height: min(84vh, 720px);
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 24px 60px rgba(17, 17, 17, 0.28);
+}
+.pickerHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.pickerTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 3px;
+}
+.pickerSub {
+  font-size: 0.85rem;
+  color: var(--ink-faint, #6a6a6a);
+  margin: 0;
+}
+.pickerClose {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink-soft, #555);
+  cursor: pointer;
+}
+.pickerClose:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.pickerSearch {
+  height: 44px;
+  border: 1px solid #d6d3cc;
+  border-radius: 12px;
+  background: var(--paper);
+  padding: 0 14px;
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.pickerSearch:focus {
+  outline: none;
+  border-color: #b9b6ae;
+}
+.pickerList {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+}
+.pickerItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s;
+}
+.pickerItem:hover:not(:disabled) {
+  background: #f6f5f2;
+  border-color: var(--line);
+}
+.pickerItem:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.pickerThumb {
+  flex: none;
+  width: 44px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #edeef1;
+  border: 1px solid var(--line);
+}
+.pickerThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pickerText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pickerName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pickerMeta {
+  font-size: 0.82rem;
+  color: var(--ink-faint, #6a6a6a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pickerAdd {
+  flex: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* ---- clearance controls (toggle + countdown) inside its card ---- */
+.clearanceControls {
+  margin-top: 14px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.clearanceDateWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.clearanceDateInput {
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid #d6d3cc;
+  border-radius: 12px;
+  background: var(--paper);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Flagged briefly when arrived at from elsewhere in the admin, e.g. the
+   dashboard's "+ Best Sellers" button. */
+.cardFocused {
+  border-color: #b9b6ae;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+  animation: cardFlash 1.8s ease-out 1;
+}
+@keyframes cardFlash {
+  0%,
+  40% {
+    background: #fbf7ea;
+  }
+  100% {
+    background: var(--paper);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cardFocused {
+    animation: none;
+  }
+}
+
+/* Explore card — title/subtitle/button label fields. */
+.exploreFields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  margin: 16px 0 12px;
+}
+
+.linkBtn {
+  align-self: flex-start;
+  border: 0;
+  background: none;
+  padding: 4px 0 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.linkBtn:hover {
+  color: var(--ink);
+}
+
+/* ---- homepage section order ---- */
+.orderList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 0;
+}
+.orderRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 14px 13px 44px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.14s, box-shadow 0.14s;
+}
+.orderRow:active {
+  cursor: grabbing;
+}
+.orderRowOver {
+  border-color: #b9b6ae;
+  box-shadow: 0 -3px 0 #b9b6ae;
+}
+.orderRow .posBadge {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+}
+.orderLabel {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.98rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.orderNudge {
+  display: inline-flex;
+  gap: 4px;
+  flex: none;
+}
+.orderNudge button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #d6d3cc;
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.orderNudge button:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.orderNudge button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.orderRow .dragHandle {
+  position: static;
+  flex: none;
+}

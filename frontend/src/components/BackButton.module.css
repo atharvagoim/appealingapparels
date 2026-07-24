@@ -1,0 +1,45 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 4px;
+  border: 0;
+  background: var(--ink);
+  color: #ffffff;
+  cursor: pointer;
+}
+.back:hover {
+  opacity: 0.85;
+}
+.translucent {
+  background: rgba(17, 17, 17, 0.5);
+  backdrop-filter: blur(3px);
+}
+.bare {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: none;
+  border: 0;
+  color: #000000;
+  cursor: pointer;
+}
+
+/* Dark square + heading beside it, matching the Shopping bag header. */
+.labelled {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.label {
+  font-size: clamp(1.5rem, 5vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.2;
+}

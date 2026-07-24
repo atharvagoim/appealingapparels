@@ -1,0 +1,83 @@
+.panel {
+  margin: 26px 0 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper);
+
+  /*
+   * .product-page lays its children out with explicit CSS `order` values
+   * (gallery:1, head:2, tags:3, buy:4, info:5) — both as a flex column on
+   * mobile and as a grid on desktop. Any child without an order defaults to
+   * 0 and jumps to the very front, which is why this used to render above
+   * everything. Matching .product-buy's order (4) and relying on the
+   * source-order tiebreak (this element comes after .product-buy in the
+   * markup) keeps it directly below the Add to cart / Buy now buttons on
+   * every screen size.
+   */
+  order: 4;
+  /*
+   * On desktop .product-page becomes a 2-column grid, and index.css assigns
+   * `grid-column: 2` to the content elements by their literal class names
+   * (.product-head, .product-tags, .product-buy, .product-info) — this
+   * component's CSS-module class isn't in that list, so it needs the same
+   * grid-column set here. Harmless on mobile, where the parent is a flex
+   * column and grid-column has no effect.
+   */
+  grid-column: 2;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.icon {
+  flex: none;
+  color: var(--ink-faint);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* Offers read as rows in a list, separated by a hairline. */
+.row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid #f0f0f0;
+}
+.row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.row:last-child {
+  padding-bottom: 0;
+}
+
+/* The code stays visually distinct so it's easy to copy by eye. */
+.code {
+  flex: none;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.benefit {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink-faint);
+}

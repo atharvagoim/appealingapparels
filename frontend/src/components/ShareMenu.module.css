@@ -1,0 +1,127 @@
+.wrap {
+  position: relative;
+  flex: none;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #d6d3cc;
+  border-radius: 4px;
+  background: var(--paper, #fff);
+  color: var(--ink, #111);
+  cursor: pointer;
+  transition: border-color 0.14s, background 0.14s;
+}
+.trigger:hover {
+  border-color: #b9b6ae;
+  background: #faf9f7;
+}
+.triggerOn,
+.triggerOn:hover {
+  border-color: var(--ink, #111);
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  z-index: 60;
+  width: 268px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  background: var(--paper, #fff);
+  border: 1px solid #e7e4dd;
+  border-radius: 4px;
+  box-shadow: 0 18px 44px rgba(17, 17, 17, 0.18);
+}
+.menuTitle {
+  padding: 2px 8px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+.item:hover {
+  background: #f5f4f1;
+}
+.itemIcon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+}
+.whatsapp {
+  background: #e7f7ec;
+  color: #128c4b;
+}
+.instagram {
+  background: #fdeef4;
+  color: #c42a70;
+}
+.facebook {
+  background: #e9f0fd;
+  color: #1a5fd0;
+}
+.copy {
+  background: #f1f0ed;
+  color: #333;
+}
+.copied {
+  background: #e7f4ea;
+  color: #1e6b34;
+}
+.itemText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.itemLabel {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink, #111);
+}
+.itemHint {
+  font-size: 0.78rem;
+  color: #8a8a8a;
+  margin-top: 1px;
+}
+
+.url {
+  margin-top: 6px;
+  padding: 8px;
+  border-top: 1px solid #f0efec;
+  font-size: 0.72rem;
+  color: #9a9a9a;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+@media (max-width: 420px) {
+  .menu {
+    width: min(268px, calc(100vw - 40px));
+  }
+}

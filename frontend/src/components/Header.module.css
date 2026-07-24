@@ -1,0 +1,454 @@
+.header {
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  height: var(--header-h);
+}
+
+/* ----- hamburger (large tap target) ----- */
+.icon {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--tap);
+  width: 40px;
+  margin-left: -8px;
+}
+.burger {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 16px;
+}
+.burger i {
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.32s var(--ease), opacity 0.2s var(--ease);
+}
+.burger i:nth-child(1) {
+  top: 0;
+}
+.burger i:nth-child(2) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.burger i:nth-child(3) {
+  bottom: 0;
+}
+.burgerOpen i:nth-child(1) {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+.burgerOpen i:nth-child(2) {
+  opacity: 0;
+}
+.burgerOpen i:nth-child(3) {
+  bottom: auto;
+  top: 50%;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+/* ----- brand ----- */
+.brand {
+  grid-column: 2;
+  justify-self: start;
+  display: flex;
+  gap: 0.3em;
+  align-items: center;
+  padding-left: 2px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(0.9rem, 3.6vw, 1.2rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.brandLogo {
+  height: 26px;
+  width: auto;
+  display: block;
+  margin-right: 0.15em;
+  flex: none;
+}
+.brandWord {
+  display: inline-block;
+}
+
+/* Phones: stack the two words so the wordmark takes half the width and
+   leaves the icon row room, sitting flush after the hamburger. */
+@media (max-width: 767px) {
+  .brand {
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    line-height: 1.05;
+    /* Small offset so it isn't jammed against the hamburger. */
+    padding-left: 8px;
+  }
+  .brandText {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    /* Both words start on the same left edge. */
+    text-align: left;
+  }
+  .brandWord {
+    display: block;
+  }
+  .row {
+    gap: 4px;
+  }
+}
+
+/* The wordmark is set in the site's own face at every size; the logo image
+   is only kept for anywhere it's still wanted. */
+.brandMobileLogo {
+  display: none;
+}
+.brandText {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+/* ----- desktop nav ----- */
+.deskNav {
+  display: none;
+}
+.deskLink {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 6px 2px;
+  border-bottom: 2px solid transparent;
+}
+.deskLink:hover {
+  border-bottom-color: var(--ink);
+}
+
+/* ----- right actions ----- */
+.actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.iconText {
+  display: none;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.bag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--tap);
+  padding: 0 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.bagIcon {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.bagCount {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+/* ----- mobile drawer ----- */
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(78vw, 300px);
+  height: 100dvh;
+  background: var(--paper);
+  border-right: 1px solid var(--line);
+  box-shadow: 8px 0 30px rgba(0, 0, 0, 0.12);
+  z-index: 60;
+  transform: translateX(-101%);
+  transition: transform 0.36s var(--ease);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 60px 20px 22px;
+}
+.drawerOpen {
+  transform: translateX(0);
+}
+.drawerNav {
+  display: flex;
+  flex-direction: column;
+  /* Absorbs the leftover height, pinning the footer links to the bottom. */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+.drawerLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+  line-height: 1.2;
+  padding: 12px 2px;
+}
+.drawerIndex {
+  display: none; /* drop the tiny numeral, it just adds noise */
+}
+.drawerFoot {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-top: 18px;
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.drawerGreeting {
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+.drawerFoot a,
+.drawerFoot button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(17, 17, 17, 0.45);
+  border: 0;
+}
+
+@media (min-width: 1000px) {
+  .icon {
+    display: none;
+  }
+  .brandLogo {
+    height: 38px;
+  }
+  .brand {
+    justify-self: start;
+    grid-column: 1;
+    font-size: 1.3rem;
+  }
+  .deskNav {
+    grid-column: 2;
+    justify-self: center;
+    display: flex;
+    gap: 30px;
+  }
+  .iconText {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+  .drawer,
+  .scrim {
+    display: none;
+  }
+}
+
+/* search icon — visible on mobile and desktop */
+.searchBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  min-width: 40px;
+  color: var(--ink);
+}
+.searchIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* X close button inside the mobile drawer */
+.drawerClose {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--ink);
+}
+.drawerClose:active {
+  opacity: 0.6;
+}
+
+/* unified header action icons (heart / search / bag) — same size */
+.iconAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  min-width: 26px;
+  color: var(--ink);
+}
+.actionIcon {
+  width: 21px;
+  height: 21px;
+  flex: none;
+}
+
+/* bag with count badge */
+.bag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  min-width: 26px;
+  color: var(--ink);
+}
+.bagBadge {
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  transform: translateY(-140%);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- categories dropdown (laptop) ---- */
+.catWrap {
+  position: relative;
+  display: inline-flex;
+}
+.catWrap .deskLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.caret {
+  transition: transform 0.2s var(--ease);
+}
+.caretOpen {
+  transform: rotate(180deg);
+}
+.catMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 220px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  z-index: 60;
+}
+.catItem {
+  padding: 11px 12px;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.catItem:hover {
+  background: #f5f5f5;
+}
+
+/* ---- categories in the mobile drawer ---- */
+.drawerCats {
+  margin-top: 2px;
+  display: flex;
+  flex-direction: column;
+}
+.drawerCatsToggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: var(--track-nav);
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+.drawerCatsToggle .caret {
+  margin-left: auto;
+}
+.drawerCatList {
+  display: flex;
+  flex-direction: column;
+  padding-left: 4px;
+  padding-bottom: 6px;
+}
+.drawerCatLink {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+}

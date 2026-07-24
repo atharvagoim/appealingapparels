@@ -1,0 +1,95 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (min-width: 980px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 3px;
+}
+.cardSub {
+  font-size: 0.85rem;
+  color: var(--ink-faint, #6a6a6a);
+  margin: 0 0 6px;
+  line-height: 1.5;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+.textarea {
+  min-height: 68px;
+  padding: 10px 12px;
+  line-height: 1.5;
+  resize: vertical;
+  font-family: inherit;
+}
+.hint {
+  margin-top: 5px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--ink-faint, #6a6a6a);
+}
+
+.colorRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.colorRow input[type="text"],
+.colorRow > input:not([type="color"]) {
+  flex: 1;
+  min-width: 0;
+}
+.colorInput {
+  flex: none;
+  width: 52px;
+  height: 48px;
+  padding: 4px;
+  border: 1px solid #d6d3cc;
+  border-radius: 12px;
+  background: var(--paper);
+  cursor: pointer;
+}
+
+/* One highlight column in the editor. */
+.statCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 14px 14px 40px;
+  border: 1px solid #eceae4;
+  border-radius: 4px;
+  background: #fdfdfc;
+}
+.statNum {
+  position: absolute;
+  top: 14px;
+  left: 12px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+@media (max-width: 620px) {
+  .statCard {
+    grid-template-columns: 1fr;
+  }
+}
