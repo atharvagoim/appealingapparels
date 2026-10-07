@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Nothing behind /admin should be indexed — it's not a public page and the
+# login gate would just show crawlers an empty shell anyway.
+Disallow: /admin
+
+Sitemap: https://appealingapparels.vercel.app/sitemap.xml

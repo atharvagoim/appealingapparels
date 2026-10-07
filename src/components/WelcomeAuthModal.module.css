@@ -1,0 +1,370 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10, 10, 10, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.18s ease;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: grid;
+  /* Mobile: image takes 40%, form takes the rest — a real side-by-side
+     split even on a phone, not hidden. */
+  grid-template-columns: 40% 1fr;
+  background: var(--paper);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.close:hover {
+  opacity: 0.6;
+  transform: scale(1.06);
+}
+
+.imageCol {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  /* Without this, the image's natural pixel size can force this grid
+     column wider than its 40%/50% share — a classic CSS Grid trap where a
+     grid item's default min-width is its content's size, not 0. */
+  min-width: 0;
+  min-height: 0;
+}
+.modal.noImage {
+  grid-template-columns: 1fr;
+}
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Mobile crop by default — switches to the laptop crop at the same
+     breakpoint the layout itself switches at, so the two always agree. */
+  object-position: var(--pop-x-m, 50%) var(--pop-y-m, 50%);
+  transform: scale(var(--pop-zoom-m, 1));
+}
+
+.formCol {
+  min-width: 0;
+  /* Extra top padding clears the close button (which sits at top:12px,
+     34px tall — so content needs to start past ~46px) so the tabs never
+     sit underneath it. */
+  padding: 54px clamp(14px, 4vw, 40px) 26px;
+  /* Sized to comfortably fit whichever tab is taller — now the Login tab,
+     since it's the only one with the "Secure Checkout / Easy Returns /
+     Order Tracking" row underneath it. This keeps both tabs the same
+     overall popup size instead of resizing when you switch between them;
+     Signup's shorter content (no trust row) just sits with a little more
+     breathing room above the tab bar. */
+  min-height: 500px;
+  box-sizing: border-box;
+}
+
+.tabs {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.tab {
+  flex: 1;
+  min-height: 46px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.tab + .tab {
+  border-left: 1px solid var(--line);
+}
+.tabOn {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fieldWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.fieldIcon {
+  position: absolute;
+  left: 15px;
+  display: inline-flex;
+  color: var(--ink-faint);
+  pointer-events: none;
+}
+.input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  padding: 13px 16px 13px 44px;
+  font-size: 0.95rem;
+  color: var(--ink);
+  transition: border-color 0.15s ease;
+}
+.input::placeholder {
+  color: var(--ink-faint);
+}
+.input:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.rowBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.link {
+  background: none;
+  border: 0;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  padding: 0;
+}
+.link:hover {
+  color: var(--ink);
+}
+
+.submit {
+  margin-top: 2px;
+  min-height: 48px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  transition: opacity 0.15s ease;
+}
+.submit:hover:not(:disabled) {
+  opacity: 0.88;
+}
+.submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.alt {
+  margin: 0;
+  text-align: center;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+.altLink {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.altLink:hover {
+  opacity: 0.75;
+}
+
+.error {
+  background: #fbeaea;
+  color: #9a2b2b;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+
+@media (min-width: 640px) {
+  .modal {
+    grid-template-columns: 1fr 1fr;
+  }
+  .image {
+    object-position: var(--pop-x-d, 50%) var(--pop-y-d, 50%);
+    transform: scale(var(--pop-zoom-d, 1));
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------- trust strip
+   Fills the space left under the shorter (login) tab, and stays
+   identical between tabs since it sits outside the tab-conditional form. */
+.trustRow {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.trustItem {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  min-width: 0;
+}
+.trustIcon {
+  flex: none;
+  color: var(--ink);
+  margin-top: 1px;
+}
+.trustItem span > span {
+  display: block;
+}
+.trustTitle {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+}
+.trustSub {
+  font-size: 0.66rem;
+  color: var(--ink-faint);
+  line-height: 1.25;
+}
+
+@media (max-width: 480px) {
+  .backdrop {
+    padding: 10px;
+  }
+  .modal {
+    max-width: 340px;
+  }
+
+  .close {
+    width: 22px;
+    height: 22px;
+    top: 6px;
+    right: 6px;
+    font-size: 0.74rem;
+  }
+
+  .formCol {
+    /* Close button is smaller/higher now (6px + 22px = 28px) — a few extra
+       px of padding keeps the tabs from sitting flush against it. */
+    padding: 32px 10px 14px;
+    min-height: 340px;
+  }
+
+  .tabs {
+    margin-bottom: 9px;
+  }
+  .tab {
+    min-height: 32px;
+    font-size: 0.72rem;
+  }
+
+  .form {
+    gap: 7px;
+  }
+
+  .fieldIcon {
+    left: 10px;
+  }
+  .fieldIcon svg {
+    width: 13px;
+    height: 13px;
+  }
+  .input {
+    padding: 8px 10px 8px 30px;
+    font-size: 0.76rem;
+  }
+
+  .link {
+    font-size: 0.68rem;
+  }
+
+  .submit {
+    min-height: 34px;
+    font-size: 0.68rem;
+  }
+
+  .alt {
+    font-size: 0.68rem;
+    margin-top: 2px;
+  }
+
+  .error {
+    font-size: 0.68rem;
+    padding: 6px 8px;
+  }
+
+  .trustRow {
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+  .trustIcon svg {
+    width: 13px;
+    height: 13px;
+  }
+  .trustTitle {
+    font-size: 0.54rem;
+  }
+  .trustSub {
+    display: none;
+  }
+}

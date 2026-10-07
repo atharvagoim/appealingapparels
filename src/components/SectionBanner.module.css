@@ -1,0 +1,26 @@
+.wrap {
+  display: block;
+}
+.fullBleed {
+  margin-bottom: 24px;
+}
+.link {
+  display: block;
+  transition: opacity 0.15s var(--ease);
+}
+.link:hover {
+  opacity: 0.92;
+}
+.image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+  background: var(--stone);
+}
+
+@media (max-width: 720px) {
+  .image {
+    aspect-ratio: 4 / 3;
+  }
+}

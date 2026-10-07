@@ -1,0 +1,108 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(10, 10, 10, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.15s ease;
+}
+
+.modal {
+  width: 100%;
+  max-width: 340px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 28px 24px 22px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  font-family: "Archivo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0a0a0a;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.body {
+  font-size: 0.92rem;
+  color: #6b6b6b;
+  line-height: 1.5;
+  margin-bottom: 22px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cancel,
+.confirm {
+  flex: 1;
+  min-height: 46px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.cancel {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  color: #0a0a0a;
+}
+.cancel:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+.confirm {
+  background: #0a0a0a;
+  border: 1px solid #0a0a0a;
+  color: #ffffff;
+}
+.confirm:hover:not(:disabled) {
+  opacity: 0.85;
+}
+.cancel:disabled,
+.confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    max-width: 100%;
+    padding: 24px 20px 18px;
+    border-radius: 12px;
+  }
+  .title {
+    font-size: 1.15rem;
+  }
+  .body {
+    font-size: 0.86rem;
+    margin-bottom: 18px;
+  }
+  .cancel,
+  .confirm {
+    min-height: 44px;
+    font-size: 0.84rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    animation: none;
+  }
+}

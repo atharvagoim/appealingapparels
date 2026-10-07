@@ -1,0 +1,220 @@
+.page {
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------- shared */
+.formPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px var(--gutter) 56px;
+}
+.card {
+  width: 100%;
+  max-width: 440px;
+}
+.eyebrow {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 5.5vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-top: 8px;
+  line-height: 1.15;
+}
+.sub {
+  margin-top: 10px;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* -------------------------------------------------------- no-image pages
+   Forgot/Reset Password never show the image panel, on any screen size —
+   just a generously spaced, centered form. */
+.centered .formPanel {
+  min-height: min(70vh, 620px);
+}
+
+/* --------------------------------------------------------- trust strip */
+.trustRow {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid color-mix(in srgb, var(--auth-accent, #0a0a0a) 25%, var(--line));
+  list-style: none;
+}
+.trustItem {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+.trustIcon {
+  flex: none;
+  color: var(--auth-accent, #0a0a0a);
+  margin-top: 1px;
+}
+.trustItem span > span {
+  display: block;
+}
+.trustTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.trustSub {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  line-height: 1.3;
+}
+
+.imagePanel {
+  display: none;
+}
+
+/* ============================================================
+   Phone (below the laptop breakpoint): Login/Signup show the photo
+   as a full-bleed, faded backdrop behind the page, with the form
+   appearing as a white card floating above it. Forgot/Reset Password
+   never opt into `.withImage`, so they're untouched by any of this.
+   ============================================================ */
+@media (max-width: 899.98px) {
+  .withImage {
+    position: relative;
+    isolation: isolate;
+    min-height: calc(100vh - 260px);
+  }
+  .withImage .imagePanel {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .withImage .image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--auth-x-m, 50%) var(--auth-y-m, 50%);
+    transform: scale(var(--auth-zoom-m, 1));
+  }
+  /* Fades up to solid white so the card reads clearly no matter how busy
+     the photo is — a plain panel (no image set) just looks like a soft
+     wash of colour instead of an empty box. */
+  .withImage .imageScrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0.82) 55%,
+      rgba(255, 255, 255, 0.97) 100%
+    );
+  }
+  /* Headline/tagline stay a laptop-only flourish — the mobile layout keeps
+     things simple: faded photo behind, plain card in front. */
+  .withImage .imageCopy {
+    display: none;
+  }
+
+  .withImage .formPanel {
+    position: relative;
+    z-index: 1;
+    padding: 36px 16px 48px;
+  }
+  .withImage .card {
+    background: var(--paper);
+    border-radius: 16px;
+    padding: 26px 20px;
+    box-shadow: 0 14px 36px rgba(10, 10, 10, 0.14);
+  }
+}
+
+@media (min-width: 900px) {
+  .withImage {
+    display: grid;
+    /* 65/35 — the photo is the dominant half on a laptop. */
+    grid-template-columns: 65% 35%;
+    /* A fixed height (not min-height) so the image is exactly as tall on
+       Login as it is on Signup — Signup's form has two more fields, and
+       without this the row would just grow to fit whichever page's content
+       is taller, making the two photos different heights. Tall enough to
+       comfortably fit Signup's form; Login's shorter form just centers
+       within the extra space. */
+    height: 760px;
+  }
+  .withImage .formPanel {
+    height: 100%;
+    overflow-y: auto;
+    padding: 48px 64px;
+  }
+
+  .imagePanel {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  .image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--auth-x-d, 50%) var(--auth-y-d, 50%);
+    transform: scale(var(--auth-zoom-d, 1));
+  }
+  /* Bottom-to-top dark scrim so the headline stays legible no matter what
+     photo gets uploaded — a plain flat panel (no image set yet) still gets
+     a bit of depth from it rather than looking like a placeholder box. */
+  .imageScrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.68) 0%,
+      rgba(0, 0, 0, 0.15) 42%,
+      rgba(0, 0, 0, 0) 62%
+    );
+  }
+
+  .imageCopy {
+    position: absolute;
+    left: 28px;
+    right: 28px;
+    bottom: 32px;
+    z-index: 1;
+  }
+  .headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    text-transform: uppercase;
+  }
+  .tagline {
+    margin-top: 8px;
+    font-size: 0.98rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+@media (min-width: 1200px) {
+  .withImage .formPanel {
+    padding: 48px 88px;
+  }
+}

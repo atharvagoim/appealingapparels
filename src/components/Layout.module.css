@@ -1,0 +1,11 @@
+.topBar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 60;
+  transition: transform 0.25s var(--ease);
+}
+.topBarHidden {
+  transform: translateY(-100%);
+}

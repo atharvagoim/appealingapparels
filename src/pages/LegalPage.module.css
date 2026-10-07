@@ -1,0 +1,97 @@
+.page {
+  background: var(--paper);
+  padding: clamp(28px, 5vw, 56px) 0 clamp(60px, 8vw, 110px);
+}
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-inline: clamp(18px, 5vw, 32px);
+}
+
+.back {
+  display: inline-block;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 28px;
+}
+.back:hover {
+  color: var(--ink);
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4.4vw, 2.7rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+}
+
+.updated {
+  font-size: 0.88rem;
+  color: var(--ink-faint);
+  padding-bottom: 28px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Prose body — headings, paragraphs and lists for the policy content itself. */
+.body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.body h2 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin: 40px 0 12px;
+}
+.body h2:first-child {
+  margin-top: 0;
+}
+.body p {
+  margin: 0 0 16px;
+}
+.body ul {
+  margin: 0 0 16px;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.body li {
+  line-height: 1.6;
+}
+.body a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.body strong {
+  color: var(--ink);
+}
+
+.notice {
+  margin-top: 40px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ink);
+  background: #faf9f7;
+  font-size: 0.88rem;
+  color: var(--ink-faint);
+  line-height: 1.6;
+}

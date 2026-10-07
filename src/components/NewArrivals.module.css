@@ -1,0 +1,139 @@
+.section {
+  padding-top: 44px;
+  padding-bottom: 44px;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  margin-bottom: 64px;
+}
+/* Empty first cell balances the link in the third. */
+.head::before {
+  content: "";
+}
+
+.title {
+  font-size: clamp(1.8rem, 8vw, 2.6rem);
+  margin-top: 6px;
+}
+.viewAll {
+  justify-self: end;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* simple grid — no horizontal scrolling to hunt through */
+.scroller {
+  overflow: visible;
+}
+.rail {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 14px;
+  padding-inline: var(--gutter);
+}
+.cell {
+  width: auto;
+}
+.endcap {
+  display: none; /* drop the decorative "see the full edit" card */
+}
+
+@media (min-width: 768px) {
+  .rail {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 22px;
+  }
+}
+@media (min-width: 1024px) {
+  .rail {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 28px;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 14px;
+}
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 20px;
+  }
+}
+
+
+/* mobile: View all becomes a rounded button under the section */
+.viewAllWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+.viewAllBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 40px;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+@media (min-width: 1000px) {
+  /* laptop keeps the text link in the heading row */
+  .viewAllWrap {
+    display: none;
+  }
+  .section {
+    padding-bottom: 0px;
+  }
+}
+@media (max-width: 999px) {
+  .viewAll {
+    display: none;
+  }
+  .section {
+    padding-bottom: 44px;
+  }
+}
+
+@media (max-width: 620px) {
+  .head {
+    grid-template-columns: 1fr;
+  }
+  .head::before {
+    display: none;
+  }
+  .viewAll {
+    justify-self: center;
+  }
+}
+
+/* ---- phones: smaller heading and a lighter View all ---- */
+@media (max-width: 620px) {
+  .title {
+    font-size: 1.3rem;
+  }
+  .viewAllBtn {
+    min-height: 36px;
+    padding: 0 18px;
+    font-size: 0.7rem;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+  .viewAllWrap {
+    margin-top: 28px;
+  }
+}

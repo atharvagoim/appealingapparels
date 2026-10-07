@@ -1,0 +1,204 @@
+.footer {
+  background: var(--ink);
+  color: var(--ink-invert);
+  padding: 48px 0 28px;
+}
+
+.top {
+  padding-bottom: 32px;
+}
+
+/* columns: two on phones, four on wide screens */
+.colsWrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+.col {
+  min-width: 0;
+}
+.colTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 14px;
+}
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  font-size: 1.05rem;
+  color: var(--ink-invert);
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+.social {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-invert);
+  opacity: 0.85;
+  transition: opacity 0.2s var(--ease);
+}
+.socialLink:hover {
+  opacity: 1;
+}
+
+/* bottom: brand + copyright, neatly split */
+.wordmarkWrap {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 22px;
+}
+.wordmark {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: clamp(1.3rem, 5vw, 1.8rem);
+}
+.legal {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 10px;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+.legal p {
+  margin: 0;
+}
+.legalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+.legalLinks a {
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+}
+.legalLinks a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+@media (min-width: 720px) {
+  .colsWrap {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+  .wordmarkWrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 20px;
+    padding-bottom: 4px;
+  }
+  .legal {
+    padding-top: 0;
+    text-align: right;
+    align-items: flex-end;
+  }
+  .legalLinks {
+    justify-content: flex-end;
+  }
+}
+
+@media (min-width: 1000px) {
+  .colsWrap {
+    grid-template-columns: 1.3fr 1fr 1fr auto;
+    gap: 36px;
+  }
+}
+
+/* ---- phones ----
+   Help + About pair up on top (both short), the long Shop list runs full
+   width in two tidy columns, and the social row sits full width beneath —
+   so nothing leaves a lopsided gap the way a 2×2 grid does. */
+@media (max-width: 719px) {
+  .footer {
+    padding: 34px 0 22px;
+  }
+  .top {
+    padding-bottom: 22px;
+  }
+  .colsWrap {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 16px;
+    align-content: start;
+  }
+  #footer-help {
+    order: 1;
+  }
+  #footer-about {
+    order: 2;
+  }
+  #footer-shop {
+    order: 3;
+    grid-column: 1 / -1;
+  }
+  #footer-social {
+    order: 4;
+    grid-column: 1 / -1;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .colTitle {
+    font-size: 0.76rem;
+    margin-bottom: 8px;
+  }
+  .link {
+    min-height: 34px;
+    font-size: 0.9rem;
+  }
+  .list {
+    gap: 0;
+  }
+  /* Shop's long category list flows into two columns so it stays compact. */
+  #footer-shop .list {
+    display: block;
+    columns: 2;
+    column-gap: 16px;
+  }
+  #footer-shop .list li {
+    break-inside: avoid;
+  }
+  .social {
+    gap: 14px;
+  }
+  .socialLink {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    opacity: 1;
+  }
+  .wordmarkWrap {
+    text-align: center;
+    padding-top: 20px;
+  }
+  .wordmark {
+    font-size: 1.2rem;
+  }
+  .legal {
+    align-items: center;
+    font-size: 0.76rem;
+    padding-top: 10px;
+  }
+}
