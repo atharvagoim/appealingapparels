@@ -2,7 +2,7 @@ import ApiError from "../utils/ApiError.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import imagekit, { imagekitConfigured } from "../config/imagekit.js";
 
-const FOLDERS = new Set(["products", "banners", "categories"]);
+const FOLDERS = new Set(["products", "banners", "categories", "pages"]);
 
 /**
  * Admin uploads product photos straight from their computer. Each file comes

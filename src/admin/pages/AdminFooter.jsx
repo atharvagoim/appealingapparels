@@ -1,4 +1,5 @@
 import { useSettings } from "../../context/SettingsContext";
+import ImageUploadButton from "../components/ImageUploadButton";
 import ui from "../admin.module.css";
 import styles from "./AdminFooter.module.css";
 
@@ -154,15 +155,14 @@ export default function AdminFooter() {
               />
             </label>
 
-            <label className={ui.catField} style={{ marginBottom: 12 }}>
-              <span className={ui.catLabel}>Image URL</span>
-              <input
-                className={ui.catInput}
-                value={about.image}
-                onChange={(e) => updateAbout({ image: e.target.value })}
-                placeholder="https://…"
+            <div className={ui.catField} style={{ marginBottom: 12 }}>
+              <span className={ui.catLabel}>Image</span>
+              <ImageUploadButton
+                folder="pages"
+                label={about.image ? "Replace image" : "+ Upload image"}
+                onUploaded={(u) => updateAbout({ image: u })}
               />
-            </label>
+            </div>
 
             {about.image && (
               <img

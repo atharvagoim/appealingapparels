@@ -1,5 +1,6 @@
 import { useSettings } from "../../context/SettingsContext";
 import ImageCrop from "../components/ImageCrop";
+import ImageUploadButton from "../components/ImageUploadButton";
 import ui from "../admin.module.css";
 
 /**
@@ -87,15 +88,14 @@ function PanelEditor({
         {hint}
       </p>
 
-      <label className={ui.catField} style={{ marginBottom: 14 }}>
-        <span className={ui.catLabel}>Image URL</span>
-        <input
-          className={ui.catInput}
-          value={panel.image}
-          onChange={(e) => onChange({ image: e.target.value })}
-          placeholder="https://…"
+      <div className={ui.catField} style={{ marginBottom: 14 }}>
+        <span className={ui.catLabel}>Image</span>
+        <ImageUploadButton
+          folder="pages"
+          label={panel.image ? "Replace image" : "+ Upload image"}
+          onUploaded={(u) => onChange({ image: u })}
         />
-      </label>
+      </div>
 
       {panel.image && !dualCrop && (
         <div style={{ maxWidth: 260, marginBottom: 16 }}>
