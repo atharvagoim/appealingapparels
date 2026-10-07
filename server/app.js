@@ -60,19 +60,34 @@ for (const o of [...allowedOrigins]) {
 const VERCEL_PREVIEW = /^https:\/\/[a-z0-9-]+\.vercel\.app$/i;
 
 app.use(
-  cors({
-    origin(origin, callback) {
-      // Same-origin requests, curl and server-to-server calls send no Origin.
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes("*")) return callback(null, true);
+  cors((req, callback) => {
+    const origin = req.headers.origin;
+    const opts = { credentials: true };
 
-      const clean = origin.replace(/\/$/, "");
-      if (allowedOrigins.includes(clean) || VERCEL_PREVIEW.test(clean)) {
-        return callback(null, true);
-      }
-      return callback(new Error(`Origin ${origin} is not allowed by CORS.`));
-    },
-    credentials: true,
+    // Same-origin requests, curl and server-to-server calls send no Origin.
+    if (!origin || allowedOrigins.includes("*")) return callback(null, { ...opts, origin: true });
+
+    const clean = origin.replace(/\/$/, "");
+    // The site and its API are served from one Vercel deployment, so a request
+    // whose Origin is this very host (any custom domain, www or not) is
+    // same-origin and always allowed — no env var needed per domain.
+    const host = String(req.headers["x-forwarded-host"] || req.headers.host || "")
+      .split(",")[0]
+      .trim()
+      .toLowerCase();
+    let originHost = "";
+    try {
+      originHost = new URL(clean).host.toLowerCase();
+    } catch {
+      /* malformed Origin — falls through to the allow-list */
+    }
+    const bare = (h) => h.replace(/^www\./, "");
+    const sameSite = host && originHost && bare(host) === bare(originHost);
+
+    if (sameSite || allowedOrigins.includes(clean) || VERCEL_PREVIEW.test(clean)) {
+      return callback(null, { ...opts, origin: true });
+    }
+    return callback(new Error(`Origin ${origin} is not allowed by CORS.`));
   })
 );
 // A body with no size cap lets a single request buffer an arbitrary amount
