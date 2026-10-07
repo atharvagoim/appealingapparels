@@ -765,3 +765,10 @@
   border-color: #201d18;
   color: #fff;
 }
+
+@media (max-width: 600px) {
+  .panel {
+    width: 100%;
+    box-shadow: none;
+  }
+}

@@ -57,6 +57,19 @@ export default function AdminLayout() {
     setOpen(false);
   }, [pathname]);
 
+  // While the mobile drawer is open: freeze the page behind it and let Escape close it.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
   // The nav scrolls now, so an item near the bottom of the list can be active
   // yet out of sight. Bring it into view on navigation and when the mobile
   // drawer opens. Hidden copies simply ignore this.

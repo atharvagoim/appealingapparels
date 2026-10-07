@@ -6,7 +6,7 @@ import client from "./client";
  * talks to the storage provider directly — the backend holds the private
  * key — so this just posts multipart form data to our own API.
  */
-export async function uploadProductImages(files) {
+export async function uploadProductImages(files, folder = "products") {
   const form = new FormData();
   Array.from(files).forEach((file) => form.append("images", file));
 
@@ -15,6 +15,7 @@ export async function uploadProductImages(files) {
   // removes it for this one request instead of sending a boundary-less
   // multipart header, which the server couldn't parse.
   const { data } = await client.post("/upload/images", form, {
+    params: { folder },
     headers: { "Content-Type": undefined },
   });
   return data.urls;

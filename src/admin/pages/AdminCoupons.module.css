@@ -312,3 +312,10 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 600px) {
+  .panel {
+    width: 100%;
+    box-shadow: none;
+  }
+}

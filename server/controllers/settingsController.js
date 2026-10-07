@@ -1,5 +1,6 @@
 import Settings from "../models/Settings.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
+import { collectSettingsImageUrls, deleteUnusedImages } from "../utils/imagekitCleanup.js";
 
 const DEFAULT_COVERS = [
   { image: "https://picsum.photos/seed/aa-cover-1/1600/2000?grayscale", link: "/shop" },
@@ -204,11 +205,18 @@ export const updateSettings = asyncHandler(async (req, res) => {
   if (Array.isArray(clearanceOrder))
     update.clearanceOrder = clearanceOrder.filter((id) => typeof id === "string");
 
+  const before = collectSettingsImageUrls(await Settings.findOne({ key: "site" }).lean());
+
   const doc = await Settings.findOneAndUpdate(
     { key: "site" },
     { $set: update },
     { new: true, upsert: true, setDefaultsOnInsert: true }
   );
+
+  // Images the admin just removed/replaced: drop them from ImageKit too
+  // (skipped automatically if anything else still uses them).
+  const after = new Set(collectSettingsImageUrls(doc));
+  await deleteUnusedImages(before.filter((u) => !after.has(u)));
   const json = doc.toJSON();
   json.coverImages = (json.coverImages || []).map(toCover);
   json.storeImages = (json.storeImages || []).map(toStore);

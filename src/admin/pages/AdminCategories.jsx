@@ -3,6 +3,7 @@ import { useSettings } from "../../context/SettingsContext";
 import { useProducts } from "../../context/ProductsContext";
 import { COLLECTION_CATEGORIES } from "../../hooks/useProductFilters";
 import ImageCrop from "../components/ImageCrop";
+import ImageUploadButton from "../components/ImageUploadButton";
 import ui from "../admin.module.css";
 import styles from "./AdminCategories.module.css";
 
@@ -220,19 +221,14 @@ export default function AdminCategories() {
               </div>
             </label>
 
-            <label className={styles.modalField}>
-              <span>Image URL</span>
-              <div className={`${styles.modalInputWrap} ${styles.iconLeft}`}>
-                <span className={styles.modalIcon}>
-                  <LinkIcon />
-                </span>
-                <input
-                  value={expanded.image}
-                  onChange={(e) => updateCategory(expandedIndex, { image: e.target.value })}
-                  placeholder="https://…  or  /path/to/image.jpg"
-                />
-              </div>
-            </label>
+            <div className={styles.modalField}>
+              <span>Image</span>
+              <ImageUploadButton
+                folder="categories"
+                label={expanded.image ? "Replace image" : "+ Upload image"}
+                onUploaded={(u) => updateCategory(expandedIndex, { image: u })}
+              />
+            </div>
 
             <label className={styles.modalField}>
               <span>Link (where it goes)</span>

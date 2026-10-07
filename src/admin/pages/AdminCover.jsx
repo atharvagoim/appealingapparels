@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSettings } from "../../context/SettingsContext";
 import ImageCrop from "../components/ImageCrop";
+import ImageUploadButton from "../components/ImageUploadButton";
 import ui from "../admin.module.css";
 import styles from "./AdminCover.module.css";
 
@@ -61,7 +62,6 @@ export default function AdminCover() {
     announcement,
     updateAnnouncement,
   } = useSettings();
-  const [url, setUrl] = useState("");
   const [link, setLink] = useState("");
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [newTagline, setNewTagline] = useState("");
@@ -91,10 +91,8 @@ export default function AdminCover() {
   const removeTagline = (i) =>
     updateAnnouncement({ taglines: taglines.filter((_, idx) => idx !== i) });
 
-  const add = () => {
-    if (!url.trim()) return;
-    addCoverImage(url, link);
-    setUrl("");
+  const add = (uploadedUrl) => {
+    addCoverImage(uploadedUrl, link);
     setLink("");
   };
 
@@ -322,20 +320,15 @@ export default function AdminCover() {
             </p>
             <div className={styles.addRow}>
               <input
-                placeholder="Image URL (https://…  or  /path/to/image.jpg)"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && add()}
-              />
-              <input
-                placeholder="Link when clicked (optional)"
+                placeholder="Link when clicked (optional) — set before uploading"
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && add()}
               />
-              <button type="button" className={styles.addBtn} onClick={add}>
-                Add image <PlusIcon />
-              </button>
+              <ImageUploadButton
+                folder="banners"
+                label="+ Upload cover image"
+                onUploaded={add}
+              />
             </div>
           </div>
           <div className={styles.card}>
@@ -444,13 +437,14 @@ export default function AdminCover() {
               </button>
             </div>
 
-            <label className={styles.modalField}>
-              <span>Image URL</span>
-              <input
-                value={expanded.image}
-                onChange={(e) => updateCoverImage(expandedIndex, { image: e.target.value })}
+            <div className={styles.modalField}>
+              <span>Image</span>
+              <ImageUploadButton
+                folder="banners"
+                label="Replace image"
+                onUploaded={(u) => updateCoverImage(expandedIndex, { image: u })}
               />
-            </label>
+            </div>
             <label className={styles.modalField}>
               <span>Link (where it goes when clicked)</span>
               <input

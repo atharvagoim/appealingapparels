@@ -1,4 +1,5 @@
 import Product from "../models/Product.js";
+import Settings from "../models/Settings.js";
 import imagekit, { imagekitConfigured } from "../config/imagekit.js";
 
 /** Every image URL a product points at (product-level + each colourway). */
@@ -11,6 +12,23 @@ export function collectImageUrls(product) {
 }
 
 const bare = (url) => url.split("?")[0];
+
+/** Every image URL the site settings point at (covers, categories, banners…). */
+export function collectSettingsImageUrls(settings) {
+  if (!settings) return [];
+  const doc = typeof settings.toObject === "function" ? settings.toObject() : settings;
+  const urls = [
+    ...(doc.coverImages || []).map((c) => (typeof c === "string" ? c : c?.image)),
+    ...(doc.storeImages || []).map((s) => (typeof s === "string" ? s : s?.src)),
+    ...(doc.categories || []).map((c) => c?.image),
+    ...Object.values(doc.sectionHeaders || {}).map((h) => h?.bannerImage),
+    doc.aboutImage,
+    doc.authLoginImage,
+    doc.authSignupImage,
+    doc.authPopupImage,
+  ];
+  return urls.filter((u) => typeof u === "string" && u);
+}
 
 /**
  * Best-effort: delete the given ImageKit-hosted URLs from the media library,
@@ -28,9 +46,10 @@ export async function deleteUnusedImages(urls) {
   try {
     // Still in use anywhere? Keep it.
     const stillUsed = new Set(
-      (await Product.find({}, "images colors.images").lean())
-        .flatMap(collectImageUrls)
-        .map(bare)
+      [
+        ...(await Product.find({}, "images colors.images").lean()).flatMap(collectImageUrls),
+        ...collectSettingsImageUrls(await Settings.findOne({ key: "site" }).lean()),
+      ].map(bare)
     );
 
     for (const url of candidates) {

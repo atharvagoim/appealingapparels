@@ -1,0 +1,40 @@
+.wrap {
+  margin: 4px 0;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--ink-invert);
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:hover {
+  opacity: 0.9;
+}
+.busy {
+  opacity: 0.6;
+  cursor: default;
+  pointer-events: none;
+}
+.hint {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+.error {
+  margin: 6px 0 0;
+  font-size: 0.84rem;
+  color: #b12704;
+}

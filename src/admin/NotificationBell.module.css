@@ -64,7 +64,7 @@
   z-index: 80;
   width: 320px;
   max-width: calc(100vw - 24px);
-  max-height: 420px;
+  max-height: min(420px, 70dvh);
   overflow-y: auto;
   background: var(--paper);
   color: var(--ink);

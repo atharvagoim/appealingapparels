@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useProducts, imagesOf } from "../../context/ProductsContext";
 import { useSettings, HOME_SECTIONS } from "../../context/SettingsContext";
 import { orderedProducts, sectionEntries } from "../../utils/sectionOrder";
+import ImageUploadButton from "../components/ImageUploadButton";
 import ui from "../admin.module.css";
 import styles from "./AdminSections.module.css";
 
@@ -186,13 +187,12 @@ function SectionHeaderEditor({
       )}
 
       {mode === "banner" && (
-        <label className={ui.catField} style={{ marginTop: 10 }}>
-          <span className={ui.catLabel}>Banner image URL</span>
-          <input
-            className={ui.catInput}
-            value={header?.bannerImage || ""}
-            onChange={(e) => onChange({ bannerImage: e.target.value })}
-            placeholder="https://…"
+        <div className={ui.catField} style={{ marginTop: 10 }}>
+          <span className={ui.catLabel}>Banner image</span>
+          <ImageUploadButton
+            folder="banners"
+            label={header?.bannerImage ? "Replace banner" : "+ Upload banner"}
+            onUploaded={(u) => onChange({ bannerImage: u })}
           />
           <span className={styles.hint}>
             Wide image works best (roughly 3:1) — it replaces the title and
@@ -205,7 +205,7 @@ function SectionHeaderEditor({
               className={styles.bannerPreview}
             />
           )}
-        </label>
+        </div>
       )}
 
       {mode === "none" && (

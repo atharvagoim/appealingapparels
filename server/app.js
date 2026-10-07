@@ -43,6 +43,20 @@ const allowedOrigins = String(config.frontendUrl || "")
   .map((o) => o.trim().replace(/\/$/, ""))
   .filter(Boolean);
 
+// Treat www.example.com and example.com as the same site, so listing one in
+// FRONTEND_URL covers both.
+for (const o of [...allowedOrigins]) {
+  try {
+    const u = new URL(o);
+    const alt = u.hostname.startsWith("www.") ? u.hostname.slice(4) : `www.${u.hostname}`;
+    if (u.hostname !== "localhost" && !/^[\d.]+$/.test(u.hostname)) {
+      allowedOrigins.push(`${u.protocol}//${alt}${u.port ? `:${u.port}` : ""}`);
+    }
+  } catch {
+    /* "*" or malformed — leave as is */
+  }
+}
+
 const VERCEL_PREVIEW = /^https:\/\/[a-z0-9-]+\.vercel\.app$/i;
 
 app.use(

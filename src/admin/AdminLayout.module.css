@@ -1,6 +1,9 @@
 .shell {
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--stone);
+  /* Nothing inside the admin may widen the page sideways on a phone. */
+  overflow-x: clip;
 }
 
 /* ---------- sidebar (desktop) ---------- */
@@ -215,18 +218,21 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  height: 56px;
-  padding: 0 16px;
+  height: calc(56px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
   background: var(--paper);
   border-bottom: 1px solid var(--line);
 }
 .menuBtn {
   display: inline-flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: 4px;
-  width: 28px;
-  height: 28px;
+  /* 44px is the minimum comfortable touch target. */
+  width: 44px;
+  height: 44px;
+  margin-left: -10px;
 }
 .menuBtn span {
   height: 1.5px;
@@ -252,12 +258,16 @@
   display: flex;
   flex-direction: column;
   background: var(--ink);
-  padding: 18px;
+  padding: calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));
+  overscroll-behavior: contain;
+  visibility: hidden;
   transform: translateX(-101%);
-  transition: transform 0.36s var(--ease);
+  transition: transform 0.3s var(--ease), visibility 0s linear 0.3s;
 }
 .drawerOpen {
+  visibility: visible;
   transform: translateX(0);
+  transition: transform 0.3s var(--ease), visibility 0s;
 }
 .drawerHead {
   flex: none;
@@ -267,7 +277,10 @@
   margin-bottom: 8px;
 }
 .close {
-  font-size: 16px;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  font-size: 18px;
   line-height: 1;
   color: rgba(255, 255, 255, 0.7);
 }
@@ -280,7 +293,46 @@
 
 /* ---------- main ---------- */
 .main {
-  padding: 20px 16px 64px;
+  /* min-width:0 lets this grid/flex child shrink instead of being stretched
+     by a wide table or long unbroken text. */
+  min-width: 0;
+  padding: 20px max(14px, env(safe-area-inset-right)) calc(64px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+}
+
+/* ---------- phone-wide form + content hardening ---------- */
+@media (max-width: 899px) {
+  /* 16px stops iOS Safari zooming the page when a field is focused. */
+  .main input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+  .main select,
+  .main textarea {
+    font-size: 16px;
+  }
+  .main input,
+  .main select,
+  .main textarea {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .main button,
+  .main select {
+    min-height: 40px;
+  }
+  .main img,
+  .main video {
+    max-width: 100%;
+  }
+  .main table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .main h1 {
+    overflow-wrap: anywhere;
+  }
+  .navLink {
+    padding: 13px 12px;
+  }
 }
 
 /* ---------- desktop ---------- */
@@ -310,5 +362,6 @@
   .main {
     padding: 40px;
     max-width: none;
+    min-width: 0;
   }
 }

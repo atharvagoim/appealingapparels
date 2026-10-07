@@ -335,3 +335,21 @@
   color: #c0392b;
   cursor: pointer;
 }
+
+/* Phones: dialogs become bottom sheets (easier to reach, never clipped). */
+@media (max-width: 600px) {
+  .overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .modal {
+    width: 100%;
+    max-width: none;
+    max-height: 92dvh;
+    border-radius: 18px 18px 0 0;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+  }
+}
