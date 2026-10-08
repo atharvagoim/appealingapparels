@@ -26,6 +26,7 @@ export default function AdminTeam() {
   const [team, setTeam] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [formError, setFormError] = useState("");
+  const [formOk, setFormOk] = useState("");
   const [saving, setSaving] = useState(false);
   const [removingId, setRemovingId] = useState("");
   const [lockingId, setLockingId] = useState("");
@@ -40,9 +41,10 @@ export default function AdminTeam() {
       setUnlocked(true);
     } catch (err) {
       setUnlockError(
-        err?.response?.status === 403
-          ? "Incorrect PIN."
-          : err?.response?.data?.message || "Couldn't verify the PIN. Please try again."
+        err?.response?.data?.message ||
+          (err?.request && !err?.response
+            ? "Couldn't reach the server — check your connection."
+            : "Couldn't verify the PIN. Please try again.")
       );
     } finally {
       setUnlocking(false);
@@ -54,6 +56,7 @@ export default function AdminTeam() {
   const addMember = async (e) => {
     e.preventDefault();
     setFormError("");
+    setFormOk("");
     if (!form.name.trim() || !form.email.trim() || !form.password) {
       setFormError("Name, email and password are all required.");
       return;
@@ -64,7 +67,8 @@ export default function AdminTeam() {
     }
     setSaving(true);
     try {
-      await addTeamMemberApi(pin.trim(), form);
+      const added = await addTeamMemberApi(pin.trim(), form);
+      setFormOk(`${added?.name || form.name} now has admin access.`);
       setForm(emptyForm);
       await refresh();
     } catch (err) {
@@ -111,11 +115,7 @@ export default function AdminTeam() {
       setLockTarget(null);
       await refresh();
     } catch (err) {
-      setLockError(
-        err?.response?.status === 403
-          ? "Incorrect PIN."
-          : err?.response?.data?.message || "Couldn't move the lock to that account."
-      );
+      setLockError(err?.response?.data?.message || "Couldn't move the lock to that account.");
     } finally {
       setLockingId("");
     }
@@ -187,7 +187,7 @@ export default function AdminTeam() {
               <button
                 className={ui.btn}
                 type="submit"
-                disabled={unlocking || pin.length < 4}
+                disabled={unlocking || pin.length < 6}
                 style={{ width: "100%", marginTop: 14 }}
               >
                 {unlocking ? "Checking…" : "Unlock"}
@@ -220,13 +220,14 @@ export default function AdminTeam() {
             style={{
               display: "flex",
               alignItems: "center",
+              flexWrap: "wrap",
               gap: 12,
               padding: "12px 0",
               borderTop: "1px solid var(--line)",
             }}
           >
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ flex: "1 1 200px", minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                 <strong style={{ fontSize: "0.94rem" }}>{m.name}</strong>
                 {m.isPrimary && (
                   <span
@@ -245,7 +246,7 @@ export default function AdminTeam() {
                   </span>
                 )}
               </div>
-              <p style={{ fontSize: "0.86rem", color: "var(--ink-faint)", margin: "2px 0 0" }}>
+              <p style={{ fontSize: "0.86rem", color: "var(--ink-faint)", margin: "2px 0 0", overflowWrap: "anywhere" }}>
                 {m.email}
               </p>
             </div>
@@ -287,6 +288,21 @@ export default function AdminTeam() {
         </p>
 
         <form onSubmit={addMember}>
+          {formOk && (
+            <p
+              style={{
+                background: "#e7f4ea",
+                color: "#1e6b34",
+                fontSize: "0.86rem",
+                fontWeight: 600,
+                padding: "10px 12px",
+                borderRadius: 8,
+                marginBottom: 14,
+              }}
+            >
+              {formOk}
+            </p>
+          )}
           {formError && (
             <p
               style={{
@@ -404,7 +420,7 @@ export default function AdminTeam() {
                   className={ui.btn}
                   type="submit"
                   style={{ flex: 1 }}
-                  disabled={lockingId === lockTarget.id || confirmPin.length < 4}
+                  disabled={lockingId === lockTarget.id || confirmPin.length < 6}
                 >
                   {lockingId === lockTarget.id ? "Locking…" : "Confirm lock"}
                 </button>

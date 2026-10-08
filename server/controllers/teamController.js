@@ -84,6 +84,9 @@ export const removeTeamMember = asyncHandler(async (req, res) => {
   if (!user || user.role !== "admin") {
     throw new ApiError(404, "Admin account not found.");
   }
+  if (String(user._id) === String(req.user._id)) {
+    throw new ApiError(400, "You can't remove your own admin access — ask another admin to do it.");
+  }
   const lockedEmail = await getLockedEmail();
   if (user.email.toLowerCase() === lockedEmail) {
     throw new ApiError(400, "The locked admin account can't be removed. Move the lock to another account first.");
