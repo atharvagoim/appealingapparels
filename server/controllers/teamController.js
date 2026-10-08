@@ -31,8 +31,8 @@ export const listTeam = asyncHandler(async (_req, res) => {
 });
 
 /** POST /api/admin/team — add a new admin/employee account, or grant admin
- *  access to an existing customer account (their own password is kept —
- *  the one typed here is only used when a brand-new account is created). */
+ *  access to an existing customer account. Either way the password typed
+ *  here becomes that account's password. */
 export const addTeamMember = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -49,10 +49,12 @@ export const addTeamMember = asyncHandler(async (req, res) => {
       throw new ApiError(409, "That account already has admin access.");
     }
     // A customer account with this email already exists — grant it admin
-    // access rather than blocking. Their existing password is left alone so
-    // they keep signing in the way they always have.
+    // access rather than blocking. The password typed here is applied too,
+    // so what the admin sets is what works at /admin (otherwise the person
+    // would be stuck with whatever password they once chose as a customer).
     existing.role = "admin";
     if (name.trim()) existing.name = name.trim();
+    existing.passwordHash = await bcrypt.hash(password, 10);
     await existing.save();
     return res.status(200).json(shape(existing, await getLockedEmail()));
   }

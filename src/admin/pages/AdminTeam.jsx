@@ -284,7 +284,8 @@ export default function AdminTeam() {
         </h2>
         <p className={ui.pageSub} style={{ marginBottom: 14, fontSize: "0.88rem" }}>
           They'll be able to sign in at /admin with the email and password
-          you set here.
+          you set here. If that email already has a shop account, its password
+          is changed to the one you type.
         </p>
 
         <form onSubmit={addMember}>
