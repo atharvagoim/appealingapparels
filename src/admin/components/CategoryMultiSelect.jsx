@@ -1,124 +1,87 @@
 import { useState } from "react";
 import styles from "./CategoryMultiSelect.module.css";
 
-const NEW = "__new__";
-
 /**
- * Pick one or more categories for a product. Selected categories show as
- * removable chips; the dropdown adds an existing category, and "Add a new
- * category" reveals a text field. A new category becomes real once the
- * product is saved with it (the list is derived from products).
+ * Pick one or more categories for a product. Every existing category is shown
+ * as a tappable chip (highlighted when chosen), and a text box underneath
+ * creates a brand-new one. A new category becomes real once the product is
+ * saved with it. Whatever is typed in the box is also added automatically when
+ * the box loses focus, so pressing "Save" without pressing "Add" first can't
+ * silently drop it.
  */
 export default function CategoryMultiSelect({ value = [], onChange, categories = [] }) {
-  const known = Array.from(new Set(categories.filter((c) => c && c !== "All"))).sort(
-    (a, b) => a.localeCompare(b)
-  );
-  const available = known.filter((c) => !value.includes(c));
-
-  const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState("");
 
-  const add = (cat) => {
-    const c = (cat || "").trim();
-    if (!c) return;
-    if (!value.some((v) => v.toLowerCase() === c.toLowerCase())) onChange([...value, c]);
-  };
-  const remove = (cat) => onChange(value.filter((v) => v !== cat));
+  const has = (list, c) => list.some((v) => v.toLowerCase() === c.toLowerCase());
 
-  const onSelect = (e) => {
-    const v = e.target.value;
-    e.target.value = "";
-    if (v === NEW) {
-      setAdding(true);
-      return;
-    }
-    if (v) add(v);
-  };
+  // Existing categories, plus anything already on this product that isn't in
+  // the shared list yet (so it still shows up, selected).
+  const known = Array.from(
+    new Set([...categories, ...value].filter((c) => c && c !== "All"))
+  ).sort((a, b) => a.localeCompare(b));
 
-  const commitNew = () => {
-    add(draft);
+  const toggle = (c) =>
+    onChange(has(value, c) ? value.filter((v) => v.toLowerCase() !== c.toLowerCase()) : [...value, c]);
+
+  const commitDraft = () => {
+    const c = draft.trim();
     setDraft("");
-    setAdding(false);
+    if (!c) return;
+    // Reuse the existing spelling if it matches one case-insensitively.
+    const existing = known.find((k) => k.toLowerCase() === c.toLowerCase());
+    const name = existing || c;
+    if (!has(value, name)) onChange([...value, name]);
   };
 
   return (
     <div className={styles.wrap}>
-      {value.length > 0 && (
-        <div className={styles.chips}>
-          {value.map((c) => (
-            <span className={styles.chip} key={c}>
-              {c}
+      {known.length > 0 ? (
+        <div className={styles.chips} role="group" aria-label="Existing categories">
+          {known.map((c) => {
+            const on = has(value, c);
+            return (
               <button
                 type="button"
-                className={styles.remove}
-                onClick={() => remove(c)}
-                aria-label={`Remove ${c}`}
+                key={c}
+                className={`${styles.pick} ${on ? styles.pickOn : ""}`}
+                aria-pressed={on}
+                onClick={() => toggle(c)}
               >
-                ×
+                {on && <span aria-hidden="true">✓ </span>}
+                {c}
               </button>
-            </span>
-          ))}
-        </div>
-      )}
-
-      {adding ? (
-        <div className={styles.newRow}>
-          <input
-            className={styles.input}
-            autoFocus
-            value={draft}
-            placeholder="New category name"
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                commitNew();
-              }
-            }}
-          />
-          <button type="button" className={styles.addBtn} onClick={commitNew}>
-            Add
-          </button>
-          <button
-            type="button"
-            className={styles.cancelBtn}
-            onClick={() => {
-              setAdding(false);
-              setDraft("");
-            }}
-          >
-            Cancel
-          </button>
+            );
+          })}
         </div>
       ) : (
-        <div className={styles.selectWrap}>
-          <select className={styles.select} value="" onChange={onSelect}>
-            <option value="" disabled>
-              {value.length ? "Add another category…" : "Select a category…"}
-            </option>
-            {available.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-            <option value={NEW}>＋ Add a new category…</option>
-          </select>
-          <svg
-            className={styles.chev}
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </div>
+        <p className={styles.empty}>No categories yet — create the first one below.</p>
       )}
+
+      <div className={styles.newRow}>
+        <input
+          className={styles.input}
+          value={draft}
+          placeholder="Create a new category…"
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={commitDraft}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              commitDraft();
+            }
+          }}
+        />
+        <button
+          type="button"
+          className={styles.addBtn}
+          // mousedown fires before the input's blur, so don't let it steal focus twice
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={commitDraft}
+          disabled={!draft.trim()}
+        >
+          + Add
+        </button>
+      </div>
     </div>
   );
 }

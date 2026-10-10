@@ -106,3 +106,32 @@
 .cancelBtn:hover {
   border-color: var(--ink);
 }
+
+/* ---- tappable existing-category chips ---- */
+.pick {
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+.pick:hover {
+  border-color: var(--ink);
+}
+.pickOn {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.empty {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+.addBtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
