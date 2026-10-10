@@ -197,7 +197,7 @@ export default function Shop() {
             clearPrice,
             priceBounds,
             categories,
-            count,
+            count: cards.length,
             reset,
           }}
         />
@@ -249,7 +249,7 @@ export default function Shop() {
         </div>
       </div>
 
-      {count > 0 ? (
+      {cards.length > 0 ? (
         <div className={`${styles.grid} shell`}>
           {cards.map((card) => (
             <ProductCard

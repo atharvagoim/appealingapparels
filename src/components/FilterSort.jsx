@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { SORT_OPTIONS } from "../hooks/useProductFilters";
 import styles from "./FilterSort.module.css";
 
-const catsOf = (p) => {
+const catsOf = (p, offered) => {
   const base =
     Array.isArray(p.categories) && p.categories.length
       ? p.categories
@@ -10,9 +10,11 @@ const catsOf = (p) => {
       ? [p.category]
       : [];
   const extra = [];
-  if (p.newArrival) extra.push("New Arrivals");
-  if (p.featured) extra.push("Best Sellers");
-  if (p.clearance) extra.push("Clearance Sale");
+  // Collections only count when they're actually offered as a category
+  // (Clearance Sale disappears while that section is switched off).
+  if (p.newArrival && offered.includes("New Arrivals")) extra.push("New Arrivals");
+  if (p.featured && offered.includes("Best Sellers")) extra.push("Best Sellers");
+  if (p.clearance && offered.includes("Clearance Sale")) extra.push("Clearance Sale");
   return [...base, ...extra];
 };
 const pctOff = (p) =>
@@ -54,9 +56,9 @@ export default function FilterSort({ products, filters }) {
 
   const catCounts = useMemo(() => {
     const m = {};
-    products.forEach((p) => catsOf(p).forEach((c) => (m[c] = (m[c] || 0) + 1)));
+    products.forEach((p) => catsOf(p, categories).forEach((c) => (m[c] = (m[c] || 0) + 1)));
     return m;
-  }, [products]);
+  }, [products, categories]);
   const saleCount = useMemo(
     () => products.filter((p) => pctOff(p) > 0).length,
     [products]

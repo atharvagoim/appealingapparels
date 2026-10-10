@@ -35,9 +35,13 @@ const catsOf = (p, includeCollections, collectionCategories) => {
   return [...base, ...extra];
 };
 
+const norm = (c) => String(c || "").trim().toLowerCase();
+
+const priceOf = (p) => Number(p.price) || 0;
+
 const pctOff = (p) =>
-  typeof p.compareAtPrice === "number" && p.compareAtPrice > p.price
-    ? 1 - p.price / p.compareAtPrice
+  typeof p.compareAtPrice === "number" && p.compareAtPrice > priceOf(p)
+    ? 1 - priceOf(p) / p.compareAtPrice
     : 0;
 
 export default function useProductFilters(
@@ -120,46 +124,58 @@ export default function useProductFilters(
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
 
+    // Category names are matched ignoring case/spacing, so a homepage tile
+    // linking to "?category=t-shirts" still finds products tagged "T-Shirts".
+    const wanted = new Set(selectedCategories.map(norm));
+
     let list = products.filter((product) => {
       if (
-        selectedCategories.length &&
+        wanted.size &&
         !catsOf(product, includeCollections, collectionCategories).some((c) =>
-          selectedCategories.includes(c)
+          wanted.has(norm(c))
         )
       )
         return false;
       if (onSaleOnly && pctOff(product) <= 0) return false;
-      if (minPrice != null && product.price < minPrice) return false;
-      if (maxPrice != null && product.price > maxPrice) return false;
+      if (minPrice != null && priceOf(product) < minPrice) return false;
+      if (maxPrice != null && priceOf(product) > maxPrice) return false;
       if (!q) return true;
-      const haystack = [product.name, product.category, product.description, product.code]
+      const haystack = [
+        product.name,
+        product.category,
+        ...(Array.isArray(product.categories) ? product.categories : []),
+        product.description,
+        product.code,
+        ...(product.colors || []).map((c) => c.name),
+      ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
-      return haystack.includes(q);
+      // Every word typed must appear somewhere ("black tote" → black AND tote).
+      return q.split(/s+/).every((word) => haystack.includes(word));
     });
 
     // sorting (copy first so we never mutate the source array)
     list = [...list];
     switch (sort) {
       case "price-asc":
-        list.sort((a, b) => a.price - b.price);
+        list.sort((a, b) => priceOf(a) - priceOf(b));
         break;
       case "price-desc":
-        list.sort((a, b) => b.price - a.price);
+        list.sort((a, b) => priceOf(b) - priceOf(a));
         break;
       case "discount":
         list.sort((a, b) => pctOff(b) - pctOff(a));
         break;
       case "name":
-        list.sort((a, b) => a.name.localeCompare(b.name));
+        list.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
         break;
       default:
         // "featured": featured first, then new arrivals, otherwise catalogue order
         list.sort(
           (a, b) =>
-            Number(b.featured) - Number(a.featured) ||
-            Number(b.newArrival) - Number(a.newArrival)
+            Number(!!b.featured) - Number(!!a.featured) ||
+            Number(!!b.newArrival) - Number(!!a.newArrival)
         );
     }
     return list;

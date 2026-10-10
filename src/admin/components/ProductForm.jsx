@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useProducts } from "../../context/ProductsContext";
+import { useSettings } from "../../context/SettingsContext";
 import { uploadProductImages } from "../../api/uploadApi";
 import CategoryMultiSelect from "./CategoryMultiSelect";
 import styles from "./ProductForm.module.css";
@@ -202,7 +203,18 @@ function toForm(product) {
 }
 
 export default function ProductForm({ initial, onSave, onClose, initialTab }) {
-  const { categories } = useProducts();
+  const { categories: productCategories } = useProducts();
+  const { categories: tiles } = useSettings();
+  // Categories made in the Categories section (homepage circles) are offered
+  // here too, not only ones some product already uses.
+  const categories = Array.from(
+    new Set([
+      ...productCategories,
+      ...tiles
+        .map((t) => (t.label || "").trim())
+        .filter((l) => l && l.toLowerCase() !== "new category"),
+    ])
+  );
   const [form, setForm] = useState(() => toForm(initial));
   const [error, setError] = useState("");
   const [tab, setTab] = useState(
