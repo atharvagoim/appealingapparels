@@ -15,13 +15,6 @@ export const DEFAULT_HIGHLIGHTS = [
   "Ideal for daily use",
 ];
 
-export const DEFAULT_FABRIC_CARE = [
-  "Premium durable material",
-  "Wipe clean with a damp cloth",
-  "Do not machine wash",
-  "Store in a cool, dry place",
-];
-
 /**
  * Fill in the defaults on a product-shaped body, but only where the admin
  * hasn't supplied their own. Mutates and returns the same object.
@@ -35,8 +28,7 @@ export function applyProductDefaults(body) {
   if (!Array.isArray(body.highlights) || body.highlights.length === 0) {
     body.highlights = [...DEFAULT_HIGHLIGHTS];
   }
-  if (!Array.isArray(body.fabricCare) || body.fabricCare.length === 0) {
-    body.fabricCare = [...DEFAULT_FABRIC_CARE];
-  }
+  // "Fabric & care" no longer exists — drop it if an old client still sends it.
+  delete body.fabricCare;
   return body;
 }

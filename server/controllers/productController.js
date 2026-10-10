@@ -6,7 +6,6 @@ import {
   applyProductDefaults,
   DEFAULT_DESCRIPTION,
   DEFAULT_HIGHLIGHTS,
-  DEFAULT_FABRIC_CARE,
 } from "../utils/productDefaults.js";
 import { collectImageUrls, deleteUnusedImages } from "../utils/imagekitCleanup.js";
 
@@ -67,12 +66,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
   ) {
     body.highlights = [...DEFAULT_HIGHLIGHTS];
   }
-  if (
-    "fabricCare" in body &&
-    (!Array.isArray(body.fabricCare) || body.fabricCare.length === 0)
-  ) {
-    body.fabricCare = [...DEFAULT_FABRIC_CARE];
-  }
+  delete body.fabricCare;
   if ("code" in body) {
     body.code = body.code && body.code.trim()
       ? await normalizeAndCheckCode(body.code, req.params.id)
@@ -111,7 +105,7 @@ export const backfillProductCodes = asyncHandler(async (req, res) => {
 
 /**
  * POST /api/products/backfill-defaults — admin-only one-off migration.
- * Fills the standard bag description, highlights and fabric/care into every
+ * Fills the standard bag description and highlights into every
  * existing product that's still missing them, so old products carry the same
  * defaults new ones get.
  */
@@ -122,8 +116,6 @@ export const backfillProductDefaults = asyncHandler(async (req, res) => {
       { description: { $exists: false } },
       { highlights: { $size: 0 } },
       { highlights: { $exists: false } },
-      { fabricCare: { $size: 0 } },
-      { fabricCare: { $exists: false } },
     ],
   });
 
@@ -136,10 +128,6 @@ export const backfillProductDefaults = asyncHandler(async (req, res) => {
     }
     if (!Array.isArray(p.highlights) || p.highlights.length === 0) {
       p.highlights = [...DEFAULT_HIGHLIGHTS];
-      changed = true;
-    }
-    if (!Array.isArray(p.fabricCare) || p.fabricCare.length === 0) {
-      p.fabricCare = [...DEFAULT_FABRIC_CARE];
       changed = true;
     }
     if (changed) {

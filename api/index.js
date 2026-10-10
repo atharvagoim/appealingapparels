@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import app from "../server/app.js";
 import config from "../server/config/env.js";
+import { dropFabricCare } from "../server/utils/dropFabricCare.js";
 
 /**
  * Vercel serverless entry point for the whole API (everything previously
@@ -34,6 +35,12 @@ async function ensureDbConnected() {
       });
   }
   await global.__mongoosePromise;
+
+  // One-time-per-instance cleanup of the removed "fabric & care" field.
+  if (!global.__fabricCareDropped) {
+    global.__fabricCareDropped = true;
+    dropFabricCare();
+  }
 }
 
 export default async function handler(req, res) {

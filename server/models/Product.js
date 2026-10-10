@@ -55,7 +55,6 @@ const productSchema = new mongoose.Schema(
     description: { type: String, default: "", trim: true },
     // Bullet lists rendered as dropdowns on the product page.
     highlights: { type: [String], default: [] },
-    fabricCare: { type: [String], default: [] },
     images: { type: [String], default: [] },
     sizes: { type: [sizeSchema], default: [] },
 

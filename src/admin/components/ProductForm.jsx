@@ -143,7 +143,6 @@ function toForm(product) {
       homeBestSeller: false,
       homeClearance: false,
       highlights: "",
-      fabricCare: "",
       images: "",
       hasSizes: true,
       stock: "0",
@@ -181,7 +180,6 @@ function toForm(product) {
     homeBestSeller: !!product.homeBestSeller,
     homeClearance: !!product.homeClearance,
     highlights: (product.highlights || []).join("\n"),
-    fabricCare: (product.fabricCare || []).join("\n"),
     images: (product.images || []).join("\n"),
     hasSizes: product.hasSizes !== false,
     stock: product.stock ?? 0,
@@ -446,7 +444,6 @@ export default function ProductForm({ initial, onSave, onClose, initialTab }) {
         homeBestSeller: form.featured && form.homeBestSeller,
         homeClearance: form.clearance && form.homeClearance,
         highlights: form.highlights.split("\n").map((s) => s.trim()).filter(Boolean),
-        fabricCare: form.fabricCare.split("\n").map((s) => s.trim()).filter(Boolean),
         images,
         hasSizes: form.hasSizes,
         // Sizes only mean anything when the product is sized, and only live at
@@ -636,17 +633,6 @@ export default function ProductForm({ initial, onSave, onClose, initialTab }) {
                   value={form.highlights}
                   onChange={(e) => set("highlights", e.target.value)}
                   placeholder={"Spacious main compartment\nPremium quality material\nLightweight & durable\nSecure zipper closure\nComfortable to carry\nIdeal for daily use"}
-                />
-              </label>
-
-              <label className={styles.field}>
-                <span className={styles.label}>Fabric &amp; care (one per line)</span>
-                <textarea
-                  className={styles.textarea}
-                  rows={4}
-                  value={form.fabricCare}
-                  onChange={(e) => set("fabricCare", e.target.value)}
-                  placeholder={"Premium durable material\nWipe clean with a damp cloth\nDo not machine wash\nStore in a cool, dry place"}
                 />
               </label>
             </>

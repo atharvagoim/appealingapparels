@@ -34,13 +34,6 @@ const DEFAULT_HIGHLIGHTS = [
   "Ideal for daily use",
 ];
 
-const DEFAULT_FABRIC_CARE = [
-  "Premium durable material",
-  "Wipe clean with a damp cloth",
-  "Do not machine wash",
-  "Store in a cool, dry place",
-];
-
 export default function Product() {
   const { slug } = useParams();
   // The shop grid links straight to a colourway, e.g. ?color=Navy%20Blue.
@@ -63,7 +56,6 @@ export default function Product() {
   const navigate = useNavigate();
   const [descOpen, setDescOpen] = useState(false);
   const [hiOpen, setHiOpen] = useState(false);
-  const [careOpen, setCareOpen] = useState(false);
   const [codeOpen, setCodeOpen] = useState(false);
 
   // Reset selection + gallery when navigating to a different product.
@@ -247,8 +239,6 @@ export default function Product() {
     product?.description?.trim() ? product.description : DEFAULT_DESCRIPTION;
   const highlights =
     product?.highlights?.length ? product.highlights : DEFAULT_HIGHLIGHTS;
-  const fabricCare =
-    product?.fabricCare?.length ? product.fabricCare : DEFAULT_FABRIC_CARE;
 
   // A product can sit in several categories — show them all as tags.
   const productTags =
@@ -578,25 +568,6 @@ export default function Product() {
             <ul className="acc-list">
               {highlights.map((h, i) => (
                 <li key={i}>{h}</li>
-              ))}
-            </ul>
-          )}
-
-          <button
-            type="button"
-            className="acc-head"
-            onClick={() => setCareOpen((o) => !o)}
-            aria-expanded={careOpen}
-          >
-            <span>Fabric &amp; care</span>
-            <svg className={careOpen ? "acc-chevron open" : "acc-chevron"} viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-          {careOpen && (
-            <ul className="acc-list">
-              {fabricCare.map((c, i) => (
-                <li key={i}>{c}</li>
               ))}
             </ul>
           )}
