@@ -52,3 +52,40 @@ export function sectionEntries(products, colorsField) {
   });
   return entries;
 }
+
+/**
+ * The cards a section shows, in the admin's order — where every colour card
+ * is positioned on its own, so one colour of a product can sit apart from the
+ * product's other colours.
+ *
+ * The saved order is a list of card keys (`<productId>:<colour>`, or just
+ * `<productId>` for a product with no colour cards). Older saves held only
+ * product ids; such an id stands for all of that product's cards, in their
+ * natural order, so existing orders keep working until the next drag.
+ * Anything not in the saved list is appended at the end.
+ */
+export function orderedEntries(products, colorsField, savedOrder) {
+  const natural = sectionEntries(orderedProducts(products, savedOrder), colorsField);
+  const byKey = new Map(natural.map((e) => [e.key, e]));
+  const byProduct = new Map();
+  natural.forEach((e) => {
+    const list = byProduct.get(String(e.product.id)) || [];
+    list.push(e);
+    byProduct.set(String(e.product.id), list);
+  });
+
+  const out = [];
+  const seen = new Set();
+  const take = (e) => {
+    if (!seen.has(e.key)) {
+      seen.add(e.key);
+      out.push(e);
+    }
+  };
+  (savedOrder || []).forEach((token) => {
+    if (byKey.has(token)) take(byKey.get(token));
+    else (byProduct.get(String(token)) || []).forEach(take);
+  });
+  natural.forEach(take);
+  return out;
+}

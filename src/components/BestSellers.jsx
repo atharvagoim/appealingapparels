@@ -4,7 +4,7 @@ import styles from "./BestSellers.module.css";
 import CardRow from "./CardRow.jsx";
 import { useProducts } from "../context/ProductsContext";
 import { useSettings } from "../context/SettingsContext";
-import { orderedProducts, sectionEntries } from "../utils/sectionOrder";
+import { orderedProducts, orderedEntries } from "../utils/sectionOrder";
 
 export default function BestSellers() {
   const { bestSellers } = useProducts();
@@ -17,7 +17,10 @@ export default function BestSellers() {
 
   // One card per chosen colourway (its own photos); products with no
   // colours or no per-section pick fall back to a single primary card.
-  const entries = useMemo(() => sectionEntries(ordered, "featuredColors"), [ordered]);
+  const entries = useMemo(
+    () => orderedEntries(ordered, "featuredColors", sectionOrder.bestSellers),
+    [ordered, sectionOrder.bestSellers]
+  );
 
   if (!ordered.length) return null;
 

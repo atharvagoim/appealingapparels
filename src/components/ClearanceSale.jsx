@@ -5,7 +5,7 @@ import CardRow from "./CardRow.jsx";
 import CountdownTimer from "./CountdownTimer.jsx";
 import { useProducts } from "../context/ProductsContext";
 import { useSettings } from "../context/SettingsContext";
-import { orderedProducts, sectionEntries } from "../utils/sectionOrder";
+import { orderedProducts, orderedEntries } from "../utils/sectionOrder";
 
 export default function ClearanceSale() {
   const { clearanceSaleEnabled, clearanceSaleEndsAt, sectionOrder, sectionTitles } = useSettings();
@@ -20,7 +20,10 @@ export default function ClearanceSale() {
   // when there's nothing marked for clearance yet.
   // One card per chosen colourway (its own photos); products with no
   // colours or no per-section pick fall back to a single primary card.
-  const entries = useMemo(() => sectionEntries(ordered, "clearanceColors"), [ordered]);
+  const entries = useMemo(
+    () => orderedEntries(ordered, "clearanceColors", sectionOrder.clearance),
+    [ordered, sectionOrder.clearance]
+  );
 
   if (!clearanceSaleEnabled || !ordered.length) return null;
 

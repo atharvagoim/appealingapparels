@@ -4,7 +4,7 @@ import styles from "./NewArrivals.module.css";
 import CardRow from "./CardRow.jsx";
 import { useProducts } from "../context/ProductsContext";
 import { useSettings } from "../context/SettingsContext";
-import { orderedProducts, sectionEntries } from "../utils/sectionOrder";
+import { orderedProducts, orderedEntries } from "../utils/sectionOrder";
 
 export default function NewArrivals() {
   const { newArrivals } = useProducts();
@@ -19,7 +19,10 @@ export default function NewArrivals() {
 
   // One card per chosen colourway (its own photos); products with no
   // colours or no per-section pick fall back to a single primary card.
-  const entries = useMemo(() => sectionEntries(ordered, "newArrivalColors"), [ordered]);
+  const entries = useMemo(
+    () => orderedEntries(ordered, "newArrivalColors", sectionOrder.newArrivals),
+    [ordered, sectionOrder.newArrivals]
+  );
 
   if (!ordered.length) return null;
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useProducts, imagesOf } from "../../context/ProductsContext";
 import { useSettings, HOME_SECTIONS } from "../../context/SettingsContext";
-import { orderedProducts, sectionEntries } from "../../utils/sectionOrder";
+import { orderedProducts, orderedEntries } from "../../utils/sectionOrder";
 import ImageUploadButton from "../components/ImageUploadButton";
 import ui from "../admin.module.css";
 import styles from "./AdminSections.module.css";
@@ -240,8 +240,8 @@ function SectionCard({
   // Show one card per featured colourway (matching the storefront), not one per
   // product — a product featured in two colours shows as two cards here too.
   const entries = useMemo(
-    () => sectionEntries(ordered, colorsField),
-    [ordered, colorsField]
+    () => orderedEntries(ordered, colorsField, orderIds),
+    [ordered, colorsField, orderIds]
   );
   const [dragIndex, setDragIndex] = useState(null);
   const [dragOverIndex, setDragOverIndex] = useState(null);
@@ -298,21 +298,12 @@ function SectionCard({
       setDragOverIndex(null);
       return;
     }
-    // Cards are per-colour but order is per-product — move the dragged card's
-    // product to the target card's product position (its colours travel with it).
-    const fromId = String(entries[dragIndex].product.id);
-    const toId = String(entries[i].product.id);
-    if (fromId !== toId) {
-      const order = ordered.map((p) => String(p.id));
-      const from = order.indexOf(fromId);
-      const to = order.indexOf(toId);
-      if (from !== -1 && to !== -1) {
-        const next = [...order];
-        const [moved] = next.splice(from, 1);
-        next.splice(to, 0, moved);
-        onReorder(next);
-      }
-    }
+    // Order is saved per card (product + colour), so moving one colour
+    // never drags the product's other colours along with it.
+    const next = entries.map((e) => String(e.key));
+    const [moved] = next.splice(dragIndex, 1);
+    next.splice(i, 0, moved);
+    onReorder(next);
     setDragIndex(null);
     setDragOverIndex(null);
   };
