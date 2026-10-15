@@ -345,6 +345,18 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Unknown order status.");
   }
 
+  // Cancelling an order always sends the customer's money back: the refund
+  // goes through Razorpay first, and the order is only marked cancelled if it
+  // succeeds (see claimAndRefund). Nothing to do by hand afterwards.
+  if (status === "cancelled") {
+    const cancelled = await claimAndRefund(req, {
+      allowedFrom: ["paid", "shipped"],
+      finalStatus: "cancelled",
+      note,
+    });
+    return res.json(cancelled);
+  }
+
   const order = await Order.findById(req.params.id);
   if (!order) throw new ApiError(404, "Order not found.");
 
@@ -433,23 +445,32 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
  * fails, the claim is rolled back so the order isn't left incorrectly
  * marked refunded with no actual refund behind it.
  */
-export const refundOrder = asyncHandler(async (req, res) => {
-  const { note = "" } = req.body;
-  const REFUNDABLE = ["paid", "shipped", "delivered"];
-
-  // Atomic claim: only succeeds if the order is still in one of the
-  // refundable statuses at this exact instant. A second request for the
-  // same order — a double-click, two admins, a retried request — will
-  // simply not match and get null back, before Razorpay is ever touched.
+/**
+ * Shared by "Refund" and "Cancel": atomically claims the order, refunds the
+ * customer's full payment through Razorpay, and only then records the result.
+ *
+ * `finalStatus` is what the order ends up as ("refunded" for the Refund
+ * button, "cancelled" for Cancel). If Razorpay refuses, the claim is rolled
+ * back and the order is left exactly as it was — an order is never cancelled
+ * or marked refunded without the money actually going back.
+ */
+async function claimAndRefund(req, { allowedFrom, finalStatus, note }) {
+  // Atomic claim: only succeeds if the order is still in one of the allowed
+  // statuses at this exact instant. A second request for the same order — a
+  // double-click, two admins, a retried request — won't match and gets null
+  // back before Razorpay is ever touched.
   const claimed = await Order.findOneAndUpdate(
-    { _id: req.params.id, status: { $in: REFUNDABLE } },
-    { $set: { status: "refunded" } },
-    { new: false } // we want the pre-claim document, to know the real "from" status and payment details
+    { _id: req.params.id, status: { $in: allowedFrom } },
+    { $set: { status: finalStatus } },
+    { new: false } // pre-claim document: real "from" status + payment details
   );
 
   if (!claimed) {
     const existing = await Order.findById(req.params.id);
     if (!existing) throw new ApiError(404, "Order not found.");
+    if (existing.status === "pending") {
+      throw new ApiError(400, "This order hasn't been paid for, so there is nothing to refund or cancel.");
+    }
     throw new ApiError(
       409,
       `This order is now ${STATUS_LABEL[existing.status]?.toLowerCase() || existing.status} — it may have just been refunded or updated elsewhere. Refresh and check before trying again.`
@@ -459,12 +480,11 @@ export const refundOrder = asyncHandler(async (req, res) => {
   const from = claimed.status;
   const paymentId = claimed.payment?.razorpayPaymentId;
   const amountPaise = Math.round((claimed.amounts?.total || 0) * 100);
+  const cleanNote = String(note || "").trim().slice(0, 500);
 
-  // From here on, any failure must roll the claim back — the order was
-  // already flipped to "refunded" above, and that's only valid once
-  // Razorpay actually confirms the refund.
+  // From here on any failure rolls the claim back.
   const rollback = async () => {
-    await Order.updateOne({ _id: claimed._id, status: "refunded" }, { $set: { status: from } });
+    await Order.updateOne({ _id: claimed._id, status: finalStatus }, { $set: { status: from } });
   };
 
   if (!paymentId) {
@@ -480,46 +500,74 @@ export const refundOrder = asyncHandler(async (req, res) => {
     throw new ApiError(400, "This order has no charge amount to refund.");
   }
 
-  let refund;
+  let refundId;
   try {
-    refund = await razorpay.payments.refund(paymentId, { amount: amountPaise });
+    const refund = await razorpay.payments.refund(paymentId, {
+      amount: amountPaise,
+      notes: { orderId: String(claimed._id), reason: finalStatus },
+    });
+    refundId = refund.id;
   } catch (err) {
-    await rollback();
-    throw new ApiError(
-      502,
-      err?.error?.description || err?.message || "Razorpay didn't accept this refund."
-    );
+    // Already refunded from the Razorpay dashboard? Then the money is back
+    // with the customer — carry on and record it instead of blocking.
+    let alreadyRefunded = false;
+    try {
+      const payment = await razorpay.payments.fetch(paymentId);
+      alreadyRefunded = payment?.status === "refunded";
+    } catch {
+      /* can't tell — treat as a real failure below */
+    }
+    if (!alreadyRefunded) {
+      await rollback();
+      console.error("Razorpay refund failed:", err?.statusCode, err?.error?.description || err?.message);
+      throw new ApiError(
+        502,
+        `Razorpay didn't accept the refund, so the order was left unchanged. ${
+          err?.error?.description || err?.message || ""
+        }`.trim()
+      );
+    }
+    refundId = "already-refunded-in-razorpay";
   }
 
-  // Refund succeeded — now fill in the rest of the record. The status
-  // itself is already "refunded" from the atomic claim above.
+  // Refund confirmed — fill in the rest of the record.
   const order = await Order.findById(claimed._id);
   order.refund = {
-    razorpayRefundId: refund.id,
+    razorpayRefundId: refundId,
     amount: amountPaise / 100,
     at: new Date(),
-    note: String(note || "").trim().slice(0, 500),
+    note: cleanNote,
   };
 
-  const byName = req.user?.name || "Admin";
+  order.payment.status = "refunded";
   order.timeline.push({
-    status: "refunded",
+    status: finalStatus,
     at: new Date(),
-    byName,
+    byName: req.user?.name || "Admin",
     by: req.user?._id || null,
-    note: String(note || "").trim().slice(0, 500),
+    note: cleanNote,
   });
 
   logActivity(
     order,
     req,
-    "Refund issued",
-    `₹${order.refund.amount} · From ${STATUS_LABEL[from]} · Razorpay refund ${refund.id}`
+    finalStatus === "cancelled" ? "Order cancelled · refund issued" : "Refund issued",
+    `₹${order.refund.amount} · From ${STATUS_LABEL[from]} · Razorpay refund ${refundId}`
   );
 
   await order.save();
+  return order;
+}
+
+export const refundOrder = asyncHandler(async (req, res) => {
+  const order = await claimAndRefund(req, {
+    allowedFrom: ["paid", "shipped", "delivered"],
+    finalStatus: "refunded",
+    note: req.body?.note,
+  });
   res.json(order);
 });
+
 export const updateShipment = asyncHandler(async (req, res) => {
   const { courier, trackingNumber, dispatchDate, trackingUrl } = req.body;
 

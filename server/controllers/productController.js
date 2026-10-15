@@ -24,7 +24,10 @@ export const getProducts = asyncHandler(async (req, res) => {
   if (clearance === "true") filter.clearance = true;
 
   if (search) {
-    const rx = new RegExp(search.trim(), "i");
+    const rx = new RegExp(
+      String(search).trim().slice(0, 80).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+      "i"
+    );
     filter.$or = [{ name: rx }, { category: rx }, { description: rx }, { code: rx }];
   }
 

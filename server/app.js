@@ -12,6 +12,10 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
+// Behind Vercel's proxy: trust exactly one hop so req.ip is the real visitor
+// (rate limits key on it) and can't be spoofed with a forged X-Forwarded-For.
+app.set("trust proxy", 1);
+
 /**
  * Standard security headers (X-Content-Type-Options, X-Frame-Options, a
  * conservative Referrer-Policy, etc.). Two defaults are switched off because

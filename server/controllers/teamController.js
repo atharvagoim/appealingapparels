@@ -38,8 +38,11 @@ export const addTeamMember = asyncHandler(async (req, res) => {
   if (!name || !email || !password) {
     throw new ApiError(400, "Name, email and password are required.");
   }
-  if (password.length < 6) {
-    throw new ApiError(400, "Password must be at least 6 characters.");
+  if (typeof password !== "string" || password.length < 8 || password.length > 128) {
+    throw new ApiError(400, "Password must be 8–128 characters.");
+  }
+  if (typeof name !== "string" || typeof email !== "string") {
+    throw new ApiError(400, "Invalid details.");
   }
 
   const existing = await User.findOne({ email: email.toLowerCase() });
@@ -55,6 +58,7 @@ export const addTeamMember = asyncHandler(async (req, res) => {
     existing.role = "admin";
     if (name.trim()) existing.name = name.trim();
     existing.passwordHash = await bcrypt.hash(password, 10);
+    existing.passwordChangedAt = new Date();
     await existing.save();
     return res.status(200).json(shape(existing, await getLockedEmail()));
   }

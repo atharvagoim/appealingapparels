@@ -19,6 +19,11 @@ export const protect = asyncHandler(async (req, res, next) => {
   const user = await User.findById(payload.id);
   if (!user) throw new ApiError(401, "User no longer exists");
 
+  // Reject logins issued before the last password change (iat is in seconds).
+  if (user.passwordChangedAt && payload.iat * 1000 < user.passwordChangedAt.getTime() - 1000) {
+    throw new ApiError(401, "Your password was changed — please sign in again.");
+  }
+
   req.user = user;
   next();
 });

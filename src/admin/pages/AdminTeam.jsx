@@ -61,8 +61,8 @@ export default function AdminTeam() {
       setFormError("Name, email and password are all required.");
       return;
     }
-    if (form.password.length < 6) {
-      setFormError("Password must be at least 6 characters.");
+    if (form.password.length < 8) {
+      setFormError("Password must be at least 8 characters.");
       return;
     }
     setSaving(true);
@@ -344,7 +344,7 @@ export default function AdminTeam() {
               type="password"
               value={form.password}
               onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-              placeholder="At least 6 characters"
+              placeholder="At least 8 characters"
             />
           </label>
 

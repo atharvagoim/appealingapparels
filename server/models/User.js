@@ -32,6 +32,9 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     passwordHash: { type: String, required: true, select: false },
+    // Set whenever the password is reset/replaced; tokens issued before this
+    // moment stop working, so a stolen login can't outlive a password change.
+    passwordChangedAt: { type: Date, default: null },
     role: { type: String, enum: ["user", "admin"], default: "user" },
     phone: { type: String, trim: true, default: "", index: true },
     addresses: { type: [addressSchema], default: [] },

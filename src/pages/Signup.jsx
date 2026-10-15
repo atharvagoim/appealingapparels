@@ -126,7 +126,7 @@ export default function Signup() {
             <PasswordInput
               className={styles.input}
               autoComplete="new-password"
-              minLength={6}
+              minLength={8}
               placeholder="Create a password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

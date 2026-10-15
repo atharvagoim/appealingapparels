@@ -58,6 +58,9 @@ export function assertConfig() {
     );
     process.exit(1);
   }
+  if (config.jwtSecret && config.jwtSecret.length < 32) {
+    console.warn("⚠ JWT_SECRET is short — use at least 32 random characters.");
+  }
   if (!config.jwtSecret) {
     console.error(
       "✖ JWT_SECRET is not set. Add a long random string to .env (used to sign auth tokens)."

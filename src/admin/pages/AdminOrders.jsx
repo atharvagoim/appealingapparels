@@ -428,7 +428,7 @@ export default function AdminOrders() {
     } else if (status === "cancelled") {
       message =
         `\n\nHi ${name}, your Appealing Apparels order ${ref(o)} has been cancelled.` +
-        `\n\nIf you paid online, your refund will be processed shortly. Sorry for the inconvenience — let us know if you have any questions!`;
+        `\n\nYour refund of ${inr(o.amounts?.total)} has been initiated and should reach your original payment method within 5–7 business days, depending on your bank. Sorry for the inconvenience — let us know if you have any questions!`;
     } else if (status === "refunded") {
       message =
         `\n\nHi ${name}, a refund of ${inr(extra?.amount ?? o.amounts?.total)} has been issued for your Appealing Apparels order ${ref(o)}.` +
@@ -1364,7 +1364,7 @@ export default function AdminOrders() {
               ? "This is the final step and can't be undone."
               : confirmAction.status === "refund"
               ? "This issues a real refund through Razorpay and can't be undone."
-              : "The order will be closed and can't be moved forward again. This can't be undone."
+              : "The order will be closed and the customer's full payment will be refunded automatically through Razorpay. If the refund fails, the order stays as it is. This can't be undone."
           }
           confirmLabel={
             confirmAction.status === "delivered"

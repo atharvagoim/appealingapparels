@@ -12,6 +12,7 @@ import {
   deleteReview,
 } from "../controllers/reviewController.js";
 import { protect, requireAdmin } from "../middleware/auth.js";
+import { adminWriteLimiter, contentLimiter } from "../middleware/rateLimiters.js";
 
 const router = Router();
 
@@ -25,10 +26,10 @@ router.get("/mine/orders", protect, listMyReviewableOrders);
 router.delete("/mine/:id", protect, deleteMyReview);
 router.get("/prompt", protect, getReviewPrompt);
 router.post("/prompt/:orderId/seen", protect, markPromptSeen);
-router.post("/", protect, createReview);
+router.post("/", protect, contentLimiter, createReview);
 
 // Admin
 router.get("/", protect, requireAdmin, listAllReviews);
-router.delete("/:id", protect, requireAdmin, deleteReview);
+router.delete("/:id", protect, requireAdmin, adminWriteLimiter, deleteReview);
 
 export default router;

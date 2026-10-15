@@ -8,6 +8,12 @@ import { signToken } from "../utils/token.js";
 import { normalizePhone } from "../utils/phone.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
+const MIN_PASSWORD = 8;
+const isStr = (v) => typeof v === "string";
+// A real bcrypt hash of a random string: compared against when the account
+// doesn't exist, so "no such user" takes as long as "wrong password".
+const DUMMY_HASH = bcrypt.hashSync(crypto.randomBytes(16).toString("hex"), 10);
+
 const publicUser = (user) => ({
   id: user.id,
   name: user.name,
@@ -22,8 +28,11 @@ export const register = asyncHandler(async (req, res) => {
   if (!name || !email || !phone || !password) {
     throw new ApiError(400, "Name, email, phone number and password are required.");
   }
-  if (password.length < 6) {
-    throw new ApiError(400, "Password must be at least 6 characters.");
+  if (![name, email, phone, password].every(isStr)) {
+    throw new ApiError(400, "Invalid details.");
+  }
+  if (password.length < MIN_PASSWORD || password.length > 128) {
+    throw new ApiError(400, `Password must be ${MIN_PASSWORD}–128 characters.`);
   }
 
   const normalizedPhone = normalizePhone(phone);
@@ -65,6 +74,9 @@ export const login = asyncHandler(async (req, res) => {
   if (!raw || !password) {
     throw new ApiError(400, "Email/phone and password are required.");
   }
+  if (!isStr(raw) || !isStr(password) || password.length > 128) {
+    throw new ApiError(400, "Invalid email/phone or password.");
+  }
 
   const emailLower = String(raw).trim().toLowerCase();
   const phoneNormalized = normalizePhone(raw);
@@ -76,7 +88,11 @@ export const login = asyncHandler(async (req, res) => {
     ],
   }).select("+passwordHash");
 
-  if (!user || !(await user.matchPassword(password))) {
+  if (!user) {
+    await bcrypt.compare(password, DUMMY_HASH); // equalise timing
+    throw new ApiError(401, "Invalid email/phone or password.");
+  }
+  if (!(await user.matchPassword(password))) {
     throw new ApiError(401, "Invalid email/phone or password.");
   }
 
@@ -100,7 +116,7 @@ export const me = asyncHandler(async (req, res) => {
  */
 export const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
-  if (!email) throw new ApiError(400, "Email is required.");
+  if (!email || !isStr(email)) throw new ApiError(400, "Email is required.");
 
   const generic = {
     message:
@@ -120,7 +136,11 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   user.resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000); // 60 minutes
   await user.save();
 
-  const resetUrl = `${config.frontendUrl}/reset-password?token=${rawToken}`;
+  // FRONTEND_URL can hold several origins; the link must use exactly one
+  // (the first https one, else the first listed).
+  const origins = String(config.frontendUrl || "").split(",").map((o) => o.trim().replace(/[/]+$/, "")).filter(Boolean);
+  const siteUrl = origins.find((o) => o.startsWith("https://")) || origins[0] || "";
+  const resetUrl = `${siteUrl}/reset-password?token=${rawToken}`;
 
   try {
     await sendPasswordResetEmail({
@@ -146,11 +166,11 @@ export const forgotPassword = asyncHandler(async (req, res) => {
  */
 export const resetPassword = asyncHandler(async (req, res) => {
   const { token, newPassword } = req.body;
-  if (!token || !newPassword) {
+  if (!token || !newPassword || !isStr(token) || !isStr(newPassword)) {
     throw new ApiError(400, "A reset link and a new password are required.");
   }
-  if (newPassword.length < 6) {
-    throw new ApiError(400, "Password must be at least 6 characters.");
+  if (newPassword.length < MIN_PASSWORD || newPassword.length > 128) {
+    throw new ApiError(400, `Password must be ${MIN_PASSWORD}–128 characters.`);
   }
 
   const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
@@ -165,6 +185,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
   }
 
   user.passwordHash = await bcrypt.hash(newPassword, 10);
+  user.passwordChangedAt = new Date();
   // Burn the token so the link can't be reused.
   user.resetTokenHash = undefined;
   user.resetTokenExpires = undefined;

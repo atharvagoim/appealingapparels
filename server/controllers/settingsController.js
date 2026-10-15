@@ -64,6 +64,9 @@ async function getOrCreate() {
 export const getSettings = asyncHandler(async (req, res) => {
   const doc = await getOrCreate();
   const json = doc.toJSON();
+  // This endpoint is public (the storefront reads it). Which admin account is
+  // the protected "primary" one is nobody else's business.
+  delete json.lockedAdminEmail;
   json.coverImages = (json.coverImages || []).map(toCover);
   json.storeImages = (json.storeImages || []).map(toStore);
   json.categories = (json.categories || []).map(toCategory);
@@ -218,6 +221,7 @@ export const updateSettings = asyncHandler(async (req, res) => {
   const after = new Set(collectSettingsImageUrls(doc));
   await deleteUnusedImages(before.filter((u) => !after.has(u)));
   const json = doc.toJSON();
+  delete json.lockedAdminEmail;
   json.coverImages = (json.coverImages || []).map(toCover);
   json.storeImages = (json.storeImages || []).map(toStore);
   json.categories = (json.categories || []).map(toCategory);

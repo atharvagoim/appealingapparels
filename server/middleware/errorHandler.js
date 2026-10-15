@@ -31,6 +31,13 @@ export function errorHandler(err, req, res, next) {
     else message = err.message || "Upload failed.";
   }
 
+  // Never echo internal details (DB errors, stack-ish text) for unexpected
+  // failures in production — log them server-side instead.
+  if (status >= 500 && !err.isOperational && config.nodeEnv === "production") {
+    console.error("Unhandled error:", err);
+    message = "Something went wrong. Please try again.";
+  }
+
   res.status(status).json({
     // `error` kept for any existing consumers; `message` is what the frontend
     // reads, so the real reason surfaces instead of a generic fallback.
