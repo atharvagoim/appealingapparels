@@ -4,7 +4,7 @@ import Settings from "../models/Settings.js";
 import config from "../config/env.js";
 import ApiError from "../utils/ApiError.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
-import { ADMIN_LOCK_PIN } from "../middleware/adminPin.js";
+import { getLockPin, pinMatches } from "../middleware/adminPin.js";
 
 /** The one admin account that can't be removed right now — whichever email
  *  was last locked in, or the env-seeded ADMIN_EMAIL if none has been set. */
@@ -109,7 +109,7 @@ export const removeTeamMember = asyncHandler(async (req, res) => {
 export const setPrimaryAdmin = asyncHandler(async (req, res) => {
   const { email, confirmPin } = req.body;
   if (!email) throw new ApiError(400, "An email is required.");
-  if (String(confirmPin || "") !== ADMIN_LOCK_PIN) {
+  if (!pinMatches(confirmPin, getLockPin())) {
     throw new ApiError(403, "Incorrect confirmation PIN.");
   }
 

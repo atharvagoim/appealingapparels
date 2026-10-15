@@ -5,6 +5,7 @@ import Product from "../models/Product.js";
 import Coupon from "../models/Coupon.js";
 import { evaluateCoupon, computeDiscount } from "../utils/coupons.js";
 import ApiError from "../utils/ApiError.js";
+import config from "../config/env.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import { razorpay, paymentsConfigured, verifyPaymentSignature } from "../utils/razorpay.js";
 
@@ -115,8 +116,21 @@ export const createOrder = asyncHandler(async (req, res) => {
       notes: { userId: String(req.user._id) },
     });
   } catch (err) {
-    const status = err?.statusCode === 401 ? 401 : 500;
-    throw new ApiError(status, "Could not create the payment order. Please try again.");
+    // Razorpay's SDK nests the reason under err.error — log it so the real
+    // cause (bad keys, test/live mismatch, amount rules) is visible in logs.
+    console.error(
+      "Razorpay order creation failed:",
+      err?.statusCode,
+      err?.error?.code,
+      err?.error?.description || err?.message
+    );
+    if (err?.statusCode === 401) {
+      throw new ApiError(
+        502,
+        "Payment gateway rejected the server's Razorpay keys. Check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET are a matching pair (both test or both live)."
+      );
+    }
+    throw new ApiError(500, "Could not create the payment order. Please try again.");
   }
 
   const order = await Order.create({
@@ -138,7 +152,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     razorpayOrderId: rzpOrder.id,
     amount: amountPaise,
     currency: "INR",
-    keyId: process.env.RAZORPAY_KEY_ID, // publishable key id only
+    keyId: config.razorpay.keyId, // publishable key id only
     amounts: { subtotal, shipping, discount, total },
   });
 });

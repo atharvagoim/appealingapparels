@@ -303,7 +303,7 @@ export default function Checkout() {
       }
 
       const rzp = new window.Razorpay({
-        key: order.keyId || import.meta.env.VITE_RAZORPAY_KEY_ID,
+        key: order.keyId, // supplied by the server (RAZORPAY_KEY_ID) — no VITE_ copy needed
         amount: order.amount,
         currency: order.currency,
         order_id: order.razorpayOrderId,

@@ -9,6 +9,10 @@ async function run() {
   await connectDB();
 
   const { name, email, password } = config.admin;
+  if (!password || password === "changeme123") {
+    console.error("✖ Set a real ADMIN_PASSWORD in .env before seeding the admin account.");
+    process.exit(1);
+  }
   const passwordHash = await bcrypt.hash(password, 10);
 
   const existing = await User.findOne({ email: email.toLowerCase() });
@@ -21,10 +25,6 @@ async function run() {
   } else {
     await User.create({ name, email, passwordHash, role: "admin" });
     console.log(`✓ Admin created: ${email}`);
-  }
-
-  if (password === "changeme123") {
-    console.warn("⚠ Using the default admin password — change ADMIN_PASSWORD in .env.");
   }
 
   await disconnectDB();

@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const cleanEnv = (v) => String(v || "").trim().replace(/^["']|["']$/g, "").trim();
+
 const config = {
   port: process.env.PORT || 5000,
   nodeEnv: process.env.NODE_ENV || "development",
@@ -18,11 +20,14 @@ const config = {
   admin: {
     name: process.env.ADMIN_NAME || "Store Admin",
     email: process.env.ADMIN_EMAIL || "admin@appealingapparels.com",
-    password: process.env.ADMIN_PASSWORD || "changeme123",
+    // No default: the seed script refuses to run without a real password.
+    password: process.env.ADMIN_PASSWORD || "",
   },
   razorpay: {
-    keyId: process.env.RAZORPAY_KEY_ID || "",
-    keySecret: process.env.RAZORPAY_KEY_SECRET || "",
+    // Trimmed (and unquoted): a stray space, newline or quote pasted into the
+    // host's env-var form is the classic cause of "authentication failed".
+    keyId: cleanEnv(process.env.RAZORPAY_KEY_ID),
+    keySecret: cleanEnv(process.env.RAZORPAY_KEY_SECRET),
   },
   mail: {
     // Brevo's HTTP API is preferred: many hosts (Render's lower tiers included)
