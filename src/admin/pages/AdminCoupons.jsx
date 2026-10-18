@@ -6,6 +6,7 @@ import {
   deleteCouponApi,
   toggleCouponApi,
 } from "../../api/couponsApi";
+import ShippingCard from "../components/ShippingCard";
 import ui from "../admin.module.css";
 import styles from "./AdminCoupons.module.css";
 
@@ -183,7 +184,7 @@ export default function AdminCoupons() {
       <div className={ui.pageHead}>
         <div>
           <h1 className={ui.pageTitle}>Coupons</h1>
-          <p className={ui.pageSub}>Create and manage discount codes for your store.</p>
+          <p className={ui.pageSub}>Create and manage discount codes and shipping charges for your store.</p>
         </div>
         <div className={ui.headActions}>
           <button className={`${ui.btn} ${ui.btnGhost}`} onClick={load}>
@@ -201,6 +202,8 @@ export default function AdminCoupons() {
           </button>
         </div>
       </div>
+
+      <ShippingCard />
 
       <div className={styles.searchCard}>
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={styles.searchIcon}>

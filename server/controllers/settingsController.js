@@ -1,4 +1,5 @@
 import Settings from "../models/Settings.js";
+import { normalizeShipping } from "../utils/shipping.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import { collectSettingsImageUrls, deleteUnusedImages } from "../utils/imagekitCleanup.js";
 
@@ -68,6 +69,7 @@ export const getSettings = asyncHandler(async (req, res) => {
   // the protected "primary" one is nobody else's business.
   delete json.lockedAdminEmail;
   delete json.paymentTestMode;
+  json.shippingSettings = normalizeShipping(json.shippingSettings);
   json.coverImages = (json.coverImages || []).map(toCover);
   json.storeImages = (json.storeImages || []).map(toStore);
   json.categories = (json.categories || []).map(toCategory);
@@ -136,6 +138,7 @@ export const updateSettings = asyncHandler(async (req, res) => {
     sectionTitleBestSellers,
     sectionTitleClearance,
     sectionHeaders,
+    shippingSettings,
     newArrivalsOrder,
     bestSellersOrder,
     clearanceOrder,
@@ -202,6 +205,9 @@ export const updateSettings = asyncHandler(async (req, res) => {
     update.sectionTitleClearance = sectionTitleClearance;
   if (sectionHeaders && typeof sectionHeaders === "object")
     update.sectionHeaders = sectionHeaders;
+  // Clamped/validated on the server, whatever the client sends.
+  if (shippingSettings && typeof shippingSettings === "object")
+    update.shippingSettings = normalizeShipping(shippingSettings);
   if (Array.isArray(newArrivalsOrder))
     update.newArrivalsOrder = newArrivalsOrder.filter((id) => typeof id === "string");
   if (Array.isArray(bestSellersOrder))
@@ -224,6 +230,7 @@ export const updateSettings = asyncHandler(async (req, res) => {
   const json = doc.toJSON();
   delete json.lockedAdminEmail;
   delete json.paymentTestMode;
+  json.shippingSettings = normalizeShipping(json.shippingSettings);
   json.coverImages = (json.coverImages || []).map(toCover);
   json.storeImages = (json.storeImages || []).map(toStore);
   json.categories = (json.categories || []).map(toCategory);

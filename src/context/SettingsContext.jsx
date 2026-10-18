@@ -93,6 +93,8 @@ const DEFAULT_ANNOUNCEMENT = {
   taglines: ["Complimentary shipping on orders over ₹1,499"],
 };
 
+import { DEFAULT_SHIPPING, normalizeShipping } from "../utils/shipping";
+
 /** "Follow us" banner on the homepage — every word of it is admin-editable. */
 const DEFAULT_SOCIAL_FOLLOW = {
   enabled: true,
@@ -196,6 +198,7 @@ function initialLocal() {
         },
         announcement: { ...DEFAULT_ANNOUNCEMENT, ...(parsed.announcement || {}) },
         socialFollow: { ...DEFAULT_SOCIAL_FOLLOW, ...(parsed.socialFollow || {}) },
+        shippingSettings: normalizeShipping(parsed.shippingSettings),
         exploreSection: { ...DEFAULT_EXPLORE, ...(parsed.exploreSection || {}) },
         homeSectionOrder: parsed.homeSectionOrder || DEFAULT_HOME_ORDER,
         footer: { ...DEFAULT_FOOTER, ...(parsed.footer || {}) },
@@ -221,6 +224,7 @@ function initialLocal() {
     sectionTitles: DEFAULT_SECTION_TITLES,
     sectionHeaders: DEFAULT_SECTION_HEADERS,
     socialFollow: DEFAULT_SOCIAL_FOLLOW,
+    shippingSettings: DEFAULT_SHIPPING,
     exploreSection: DEFAULT_EXPLORE,
     homeSectionOrder: DEFAULT_HOME_ORDER,
     announcement: DEFAULT_ANNOUNCEMENT,
@@ -244,6 +248,7 @@ export function SettingsProvider({ children }) {
         clearanceSaleEndsAt: null,
         storeInfo: DEFAULT_STORE_INFO,
         socialFollow: DEFAULT_SOCIAL_FOLLOW,
+        shippingSettings: DEFAULT_SHIPPING,
         exploreSection: DEFAULT_EXPLORE,
         homeSectionOrder: DEFAULT_HOME_ORDER,
         announcement: DEFAULT_ANNOUNCEMENT,
@@ -271,6 +276,9 @@ export function SettingsProvider({ children }) {
   );
   const [socialFollow, setSocialFollowState] = useState(
     local.socialFollow || DEFAULT_SOCIAL_FOLLOW
+  );
+  const [shippingSettings, setShippingState] = useState(
+    normalizeShipping(local.shippingSettings)
   );
   const [exploreSection, setExploreState] = useState(
     local.exploreSection || DEFAULT_EXPLORE
@@ -347,6 +355,7 @@ export function SettingsProvider({ children }) {
           ...DEFAULT_SOCIAL_FOLLOW,
           ...(data.socialFollow || {}),
         });
+        setShippingState(normalizeShipping(data.shippingSettings));
         setExploreState({ ...DEFAULT_EXPLORE, ...(data.exploreSection || {}) });
         if (Array.isArray(data.homeSectionOrder) && data.homeSectionOrder.length) {
           setHomeOrderState(data.homeSectionOrder);
@@ -402,6 +411,7 @@ export function SettingsProvider({ children }) {
     sectionHeaders,
         sectionHeaders,
         socialFollow,
+        shippingSettings,
         exploreSection,
         homeSectionOrder,
         announcement,
@@ -420,6 +430,7 @@ export function SettingsProvider({ children }) {
     authPanels,
     sectionTitles,
     socialFollow,
+    shippingSettings,
     exploreSection,
     homeSectionOrder,
     announcement,
@@ -624,6 +635,13 @@ export function SettingsProvider({ children }) {
     save({ socialFollow: next });
   };
 
+  /* ---------- shipping rules (public — applies to every customer) ---------- */
+  const updateShippingSettings = (patch) => {
+    const next = normalizeShipping({ ...shippingSettings, ...patch });
+    setShippingState(next);
+    save({ shippingSettings: next });
+  };
+
   /* ---------- the free-form "Explore" rail ---------- */
   const updateExploreSection = (patch) => {
     const next = { ...exploreSection, ...patch };
@@ -733,6 +751,8 @@ export function SettingsProvider({ children }) {
         updateSectionHeader,
         socialFollow,
         updateSocialFollow,
+        shippingSettings,
+        updateShippingSettings,
         exploreSection,
         updateExploreSection,
         homeSectionOrder,

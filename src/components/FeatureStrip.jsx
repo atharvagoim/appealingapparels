@@ -1,9 +1,11 @@
+import { useSettings } from "../context/SettingsContext";
+import { shippingPromise } from "../utils/shipping";
 import styles from "./FeatureStrip.module.css";
 
 const FEATURES = [
   {
     title: "Free shipping",
-    sub: "On orders above ₹1,499",
+    sub: "",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M3 6.5h10.5v9.5H3z" />
@@ -38,10 +40,13 @@ const FEATURES = [
 ];
 
 export default function FeatureStrip() {
+  const { shippingSettings } = useSettings();
+  const promise = shippingPromise(shippingSettings);
+  const features = FEATURES.map((f, i) => (i === 0 ? { ...f, ...promise } : f));
   return (
     <section className={styles.section} aria-label="Why shop with us">
       <div className={`${styles.strip} shell`}>
-        {FEATURES.map((f) => (
+        {features.map((f) => (
           <div className={styles.item} key={f.title}>
             <span className={styles.icon}>{f.icon}</span>
             <span className={styles.text}>

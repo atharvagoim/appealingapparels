@@ -105,6 +105,10 @@ const settingsSchema = new mongoose.Schema(
     // set once someone actually moves the lock to a different account.
     lockedAdminEmail: { type: String, default: "" },
 
+    // Shipping rules (charge on/off, flat rate, free-above threshold). Public:
+    // the storefront shows them; checkout recomputes from them on the server.
+    shippingSettings: { type: mongoose.Schema.Types.Mixed, default: null },
+
     // Admin-only payment test mode (₹1–₹2, no shipping, auto-expires). Never
     // sent to the storefront — see testModeController.
     paymentTestMode: { type: mongoose.Schema.Types.Mixed, default: null },

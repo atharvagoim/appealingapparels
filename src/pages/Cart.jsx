@@ -11,10 +11,10 @@ import {
 } from "../context/ProductsContext";
 import styles from "./Cart.module.css";
 import BackButton from "../components/BackButton";
+import { useSettings } from "../context/SettingsContext";
+import { shippingFor } from "../utils/shipping";
 
 const inr = (n) => `₹${Number(n).toLocaleString("en-IN")}`;
-const FREE_SHIPPING = 1499;
-const FLAT_SHIPPING = 99;
 const LOW_STOCK = 10;
 
 export default function Cart() {
@@ -63,12 +63,12 @@ export default function Cart() {
     return 0;
   }, [appliedCoupon, couponPaused, subtotal]);
 
-  const shipping =
-    appliedCoupon?.freeShipping && !couponPaused
-      ? 0
-      : subtotal >= FREE_SHIPPING
-      ? 0
-      : FLAT_SHIPPING;
+  const { shippingSettings } = useSettings();
+  const shipping = shippingFor(
+    subtotal,
+    shippingSettings,
+    !!(appliedCoupon?.freeShipping && !couponPaused)
+  );
 
   const total = Math.max(0, subtotal + shipping - couponDiscount);
   const totalSaved = discount + couponDiscount;

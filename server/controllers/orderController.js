@@ -7,11 +7,10 @@ import { evaluateCoupon, computeDiscount } from "../utils/coupons.js";
 import ApiError from "../utils/ApiError.js";
 import config from "../config/env.js";
 import { testModeFor } from "./testModeController.js";
+import { readShippingRules, computeShipping } from "../utils/shipping.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import { razorpay, paymentsConfigured, verifyPaymentSignature } from "../utils/razorpay.js";
 
-const FREE_SHIPPING_THRESHOLD = 1499; // ₹
-const FLAT_SHIPPING = 99; // ₹
 const MIN_AMOUNT_PAISE = 100;
 
 /**
@@ -98,8 +97,8 @@ export const createOrder = asyncHandler(async (req, res) => {
     };
   }
 
-  let shipping =
-    freeShippingFromCoupon || subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING;
+  // Shipping rules are the admin's (on/off, flat rate, free-above threshold).
+  let shipping = computeShipping(subtotal, await readShippingRules(), freeShippingFromCoupon);
   let total = Math.max(0, subtotal + shipping - discount);
 
   // Payment test mode: only ever applies to an ADMIN's own checkout (decided

@@ -5,6 +5,8 @@ import { useProducts, sizesOf } from "../context/ProductsContext";
 import { useAuth } from "../context/AuthContext";
 import { createOrderApi, verifyPaymentApi } from "../api/ordersApi";
 import { fetchMyTestMode } from "../api/testModeApi";
+import { useSettings } from "../context/SettingsContext";
+import { shippingFor } from "../utils/shipping";
 import {
   fetchAddresses,
   addAddressApi,
@@ -19,8 +21,6 @@ import BackButton from "../components/BackButton";
 import styles from "./Checkout.module.css";
 
 const inr = (n) => `₹${Number(n).toLocaleString("en-IN")}`;
-const FREE_SHIPPING = 1499;
-const FLAT_SHIPPING = 99;
 
 const BLANK = {
   label: "Home",
@@ -64,6 +64,7 @@ export default function Checkout() {
 
   // Admin-only payment test mode (₹1–₹2, no shipping). The server decides; this
   // only mirrors it on screen. Customers always get { active: false }.
+  const { shippingSettings } = useSettings();
   const [testMode, setTestMode] = useState({ active: false, amount: 0 });
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -138,9 +139,12 @@ export default function Checkout() {
 
   const shipping = useMemo(() => {
     if (testMode.active) return 0;
-    if (appliedCoupon?.freeShipping && !couponPaused) return 0;
-    return subtotal >= FREE_SHIPPING || subtotal === 0 ? 0 : FLAT_SHIPPING;
-  }, [appliedCoupon, couponPaused, subtotal, testMode.active]);
+    return shippingFor(
+      subtotal,
+      shippingSettings,
+      !!(appliedCoupon?.freeShipping && !couponPaused)
+    );
+  }, [appliedCoupon, couponPaused, subtotal, testMode.active, shippingSettings]);
 
   const total = testMode.active
     ? testMode.amount
