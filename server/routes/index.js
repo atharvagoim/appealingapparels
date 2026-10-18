@@ -11,6 +11,7 @@ import reviewRoutes from "./reviewRoutes.js";
 import teamRoutes from "./teamRoutes.js";
 import notificationRoutes from "./notificationRoutes.js";
 import uploadRoutes from "./uploadRoutes.js";
+import testModeRoutes from "./testModeRoutes.js";
 
 const router = Router();
 
@@ -28,6 +29,7 @@ router.use("/admin", adminUserRoutes);
 router.use("/coupons", couponRoutes);
 router.use("/reviews", reviewRoutes);
 router.use("/admin/team", teamRoutes);
+router.use("/admin/payment-test-mode", testModeRoutes);
 router.use("/admin/notifications", notificationRoutes);
 router.use("/upload", uploadRoutes);
 

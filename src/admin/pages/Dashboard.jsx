@@ -230,7 +230,7 @@ export default function Dashboard() {
     if (by[o.status] !== undefined) by[o.status] += 1;
   });
   const revenue = list
-    .filter((o) => ["paid", "shipped", "delivered"].includes(o.status))
+    .filter((o) => !o.isTest && ["paid", "shipped", "delivered"].includes(o.status))
     .reduce((s, o) => s + (o.amounts?.total || 0), 0);
 
   /** Real week-over-week revenue change — last 7 days vs the 7 before that,
@@ -238,8 +238,8 @@ export default function Dashboard() {
    *  week revenue to compare against (division by zero would be meaningless,
    *  not "infinite growth"). */
   const revenueTrend = (() => {
-    const eligible = list.filter((o) =>
-      ["paid", "shipped", "delivered"].includes(o.status)
+    const eligible = list.filter(
+      (o) => !o.isTest && ["paid", "shipped", "delivered"].includes(o.status)
     );
     const now = Date.now();
     const day = 86400000;

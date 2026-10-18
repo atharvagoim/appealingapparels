@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useProducts, sizesOf } from "../context/ProductsContext";
 import { useAuth } from "../context/AuthContext";
 import { createOrderApi, verifyPaymentApi } from "../api/ordersApi";
+import { fetchMyTestMode } from "../api/testModeApi";
 import {
   fetchAddresses,
   addAddressApi,
@@ -60,6 +61,20 @@ export default function Checkout() {
 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+
+  // Admin-only payment test mode (₹1–₹2, no shipping). The server decides; this
+  // only mirrors it on screen. Customers always get { active: false }.
+  const [testMode, setTestMode] = useState({ active: false, amount: 0 });
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let on = true;
+    fetchMyTestMode()
+      .then((t) => on && setTestMode(t))
+      .catch(() => {});
+    return () => {
+      on = false;
+    };
+  }, [isAuthenticated]);
 
   useEffect(() => {
     setEmail(user?.email || "");
@@ -122,11 +137,14 @@ export default function Checkout() {
   }, [appliedCoupon, couponPaused, subtotal]);
 
   const shipping = useMemo(() => {
+    if (testMode.active) return 0;
     if (appliedCoupon?.freeShipping && !couponPaused) return 0;
     return subtotal >= FREE_SHIPPING || subtotal === 0 ? 0 : FLAT_SHIPPING;
-  }, [appliedCoupon, couponPaused, subtotal]);
+  }, [appliedCoupon, couponPaused, subtotal, testMode.active]);
 
-  const total = Math.max(0, subtotal + shipping - couponDiscount);
+  const total = testMode.active
+    ? testMode.amount
+    : Math.max(0, subtotal + shipping - couponDiscount);
   const discount = mrpDiscount; // kept for the existing "Discount on MRP" line below
 
   const selected = addresses.find((a) => a._id === selectedId);
@@ -760,6 +778,24 @@ export default function Checkout() {
             >
               {busy ? "Processing…" : `Pay ${inr(total)}`}
             </button>
+            {testMode.active && (
+              <p
+                role="status"
+                style={{
+                  margin: "12px 0 0",
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  background: "#fff4d6",
+                  color: "#7a5200",
+                  fontSize: "0.85rem",
+                  fontWeight: 700,
+                  lineHeight: 1.4,
+                }}
+              >
+                TEST MODE (admin only): you will be charged {inr(testMode.amount)} with no
+                shipping. Real customers are not affected.
+              </p>
+            )}
             <p className={styles.secure}>Secured by Razorpay</p>
           </aside>
         </div>

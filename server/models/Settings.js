@@ -105,6 +105,10 @@ const settingsSchema = new mongoose.Schema(
     // set once someone actually moves the lock to a different account.
     lockedAdminEmail: { type: String, default: "" },
 
+    // Admin-only payment test mode (₹1–₹2, no shipping, auto-expires). Never
+    // sent to the storefront — see testModeController.
+    paymentTestMode: { type: mongoose.Schema.Types.Mixed, default: null },
+
     // Quick-insert reply templates for the admin support chat.
     savedReplies: { type: [String], default: [] },
 

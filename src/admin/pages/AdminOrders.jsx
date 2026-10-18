@@ -383,7 +383,8 @@ export default function AdminOrders() {
     );
 
   const ref = (o) =>
-    o.orderNumber || `#${String(o.id || o._id).slice(-6).toUpperCase()}`;
+    (o.orderNumber || `#${String(o.id || o._id).slice(-6).toUpperCase()}`) +
+    (o.isTest ? " (TEST)" : "");
 
   /** Indian numbers as typed (10 digits, or with a +91/91 prefix, spaces,
    *  dashes) all need to become a plain "91XXXXXXXXXX" for a wa.me link. */

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchTeam, addTeamMemberApi, removeTeamMemberApi, setPrimaryTeamMemberApi } from "../../api/teamApi";
+import { fetchTestModeAdmin, setTestModeApi } from "../../api/testModeApi";
 import ui from "../admin.module.css";
 
 const TrashIcon = () => (
@@ -30,6 +31,33 @@ export default function AdminTeam() {
   const [saving, setSaving] = useState(false);
   const [removingId, setRemovingId] = useState("");
   const [lockingId, setLockingId] = useState("");
+
+  // ---- payment test mode (₹1–₹2, no shipping, admin checkouts only) ----
+  const [tm, setTm] = useState(null);
+  const [tmAmount, setTmAmount] = useState(1);
+  const [tmMinutes, setTmMinutes] = useState(60);
+  const [tmBusy, setTmBusy] = useState(false);
+  const [tmError, setTmError] = useState("");
+
+  useEffect(() => {
+    if (!unlocked) return;
+    fetchTestModeAdmin(pin.trim())
+      .then(setTm)
+      .catch(() => setTm({ enabled: false }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unlocked]);
+
+  const toggleTestMode = async (enabled) => {
+    setTmError("");
+    setTmBusy(true);
+    try {
+      setTm(await setTestModeApi(pin.trim(), { enabled, amount: tmAmount, minutes: tmMinutes }));
+    } catch (err) {
+      setTmError(err?.response?.data?.message || "Couldn't change test mode.");
+    } finally {
+      setTmBusy(false);
+    }
+  };
 
   const unlock = async (e) => {
     e.preventDefault();
@@ -276,6 +304,96 @@ export default function AdminTeam() {
             )}
           </div>
         ))}
+      </div>
+
+      <div className={ui.panel} style={{ padding: 20, marginBottom: 24, maxWidth: 480 }}>
+        <h2 style={{ marginTop: 0, marginBottom: 4, fontSize: "1.1rem" }}>
+          Payment test mode
+          {tm?.enabled && (
+            <span
+              style={{
+                marginLeft: 8,
+                fontSize: "0.68rem",
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.04em",
+                color: "#7a5200",
+                background: "#fff4d6",
+                padding: "2px 8px",
+                borderRadius: 999,
+              }}
+            >
+              On
+            </span>
+          )}
+        </h2>
+        <p className={ui.pageSub} style={{ marginBottom: 14, fontSize: "0.88rem" }}>
+          For testing the Razorpay flow. While on, checkouts made by{" "}
+          <strong>admin accounts only</strong> charge a flat ₹1 or ₹2 with no
+          shipping; real customers pay normally. Test orders don't touch stock or
+          revenue, and the mode switches itself off when the timer ends.
+        </p>
+
+        {tmError && (
+          <p
+            style={{
+              background: "#fbeaea",
+              color: "#9a2b2b",
+              fontSize: "0.86rem",
+              fontWeight: 600,
+              padding: "10px 12px",
+              borderRadius: 8,
+              marginBottom: 14,
+            }}
+          >
+            {tmError}
+          </p>
+        )}
+
+        {tm?.enabled ? (
+          <>
+            <p style={{ fontSize: "0.9rem", marginBottom: 14 }}>
+              Charging <strong>₹{tm.amount}</strong> until{" "}
+              <strong>{new Date(tm.expiresAt).toLocaleTimeString()}</strong>
+              {tm.enabledBy ? ` · turned on by ${tm.enabledBy}` : ""}.
+            </p>
+            <button className={ui.btn} type="button" disabled={tmBusy} onClick={() => toggleTestMode(false)}>
+              {tmBusy ? "Turning off…" : "Turn test mode off"}
+            </button>
+          </>
+        ) : (
+          <>
+            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 14 }}>
+              <label className={ui.catField} style={{ flex: "1 1 140px" }}>
+                <span className={ui.catLabel}>Charge</span>
+                <select
+                  className={ui.catInput}
+                  value={tmAmount}
+                  onChange={(e) => setTmAmount(Number(e.target.value))}
+                >
+                  <option value={1}>₹1</option>
+                  <option value={2}>₹2</option>
+                </select>
+              </label>
+              <label className={ui.catField} style={{ flex: "1 1 140px" }}>
+                <span className={ui.catLabel}>Switch off after</span>
+                <select
+                  className={ui.catInput}
+                  value={tmMinutes}
+                  onChange={(e) => setTmMinutes(Number(e.target.value))}
+                >
+                  <option value={30}>30 minutes</option>
+                  <option value={60}>1 hour</option>
+                  <option value={120}>2 hours</option>
+                  <option value={240}>4 hours</option>
+                </select>
+              </label>
+            </div>
+            <button className={ui.btn} type="button" disabled={tmBusy} onClick={() => toggleTestMode(true)}>
+              {tmBusy ? "Turning on…" : "Turn test mode on"}
+            </button>
+          </>
+        )}
       </div>
 
       <div className={ui.panel} style={{ padding: 20, maxWidth: 480 }}>

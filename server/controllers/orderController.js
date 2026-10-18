@@ -6,6 +6,7 @@ import Coupon from "../models/Coupon.js";
 import { evaluateCoupon, computeDiscount } from "../utils/coupons.js";
 import ApiError from "../utils/ApiError.js";
 import config from "../config/env.js";
+import { testModeFor } from "./testModeController.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 import { razorpay, paymentsConfigured, verifyPaymentSignature } from "../utils/razorpay.js";
 
@@ -97,9 +98,20 @@ export const createOrder = asyncHandler(async (req, res) => {
     };
   }
 
-  const shipping =
+  let shipping =
     freeShippingFromCoupon || subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING;
-  const total = Math.max(0, subtotal + shipping - discount);
+  let total = Math.max(0, subtotal + shipping - discount);
+
+  // Payment test mode: only ever applies to an ADMIN's own checkout (decided
+  // here on the server). No shipping, and a flat ₹1–₹2 charge, so the real
+  // Razorpay flow can be exercised cheaply. Customers are never affected.
+  const testMode = await testModeFor(req.user);
+  if (testMode) {
+    shipping = 0;
+    discount = Math.max(0, subtotal - testMode.amount);
+    total = testMode.amount;
+    couponSnapshot = undefined; // a coupon is meaningless on a test charge
+  }
   const amountPaise = Math.round(total * 100);
 
   if (amountPaise < MIN_AMOUNT_PAISE) {
@@ -140,6 +152,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     coupon: couponSnapshot,
     shippingAddress: shippingAddress || {},
     status: "pending",
+    isTest: !!testMode,
     payment: {
       provider: "razorpay",
       status: "created",
@@ -153,6 +166,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     amount: amountPaise,
     currency: "INR",
     keyId: config.razorpay.keyId, // publishable key id only
+    testMode: !!testMode,
     amounts: { subtotal, shipping, discount, total },
   });
 });
@@ -213,7 +227,9 @@ export const verifyPayment = asyncHandler(async (req, res) => {
       status: "paid",
       at: new Date(),
       byName: "Razorpay",
-      note: "Payment verified automatically.",
+      note: order.isTest
+        ? "TEST ORDER — payment verified automatically (test mode, no real sale)."
+        : "Payment verified automatically.",
     });
     order.activity.push({
       action: "Payment verified",
@@ -226,7 +242,7 @@ export const verifyPayment = asyncHandler(async (req, res) => {
 
     // Coupon usage only counts once payment is actually confirmed — an
     // abandoned checkout should never eat into a limited coupon's stock.
-    if (order.coupon?.code) {
+    if (order.coupon?.code && !order.isTest) {
       const coupon = await Coupon.findOne({ code: order.coupon.code });
       if (coupon) {
         coupon.redemptions.push({
@@ -243,6 +259,7 @@ export const verifyPayment = asyncHandler(async (req, res) => {
     // sized, otherwise a flat count), so we drill into that variant rather than
     // the product's own — otherwise a coloured piece would never sell down.
     for (const item of order.items) {
+      if (order.isTest) break; // a test order must never reduce real stock
       if (!item.product) continue;
       const product = await Product.findById(item.product);
       if (!product) continue;

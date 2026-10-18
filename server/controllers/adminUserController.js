@@ -12,7 +12,7 @@ export const listCustomers = asyncHandler(async (_req, res) => {
 
   // One aggregate pass for spend + order counts (paid orders only for spend).
   const stats = await Order.aggregate([
-    { $match: { status: { $ne: "pending" } } },
+    { $match: { status: { $ne: "pending" }, isTest: { $ne: true } } },
     {
       $group: {
         _id: "$user",

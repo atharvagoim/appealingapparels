@@ -54,6 +54,8 @@ const orderSchema = new mongoose.Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     // Human-facing reference, assigned once the payment succeeds.
     orderNumber: { type: String, unique: true, sparse: true, index: true },
+    // Placed by an admin while payment test mode was on (₹1–₹2, no shipping).
+    isTest: { type: Boolean, default: false },
     items: { type: [orderItemSchema], default: [] },
     amounts: {
       subtotal: { type: Number, default: 0 },
