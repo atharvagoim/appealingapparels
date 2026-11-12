@@ -7,6 +7,7 @@ import { ProductsProvider } from "./context/ProductsContext";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
+import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <CartProvider>
             <WishlistProvider>
               <RouterProvider router={router} />
+              <Analytics />
             </WishlistProvider>
           </CartProvider>
         </ProductsProvider>
