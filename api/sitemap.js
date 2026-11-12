@@ -14,6 +14,7 @@ const configuredApiUrl = (process.env.API_URL || process.env.VITE_API_URL || "")
 
 // Pages that exist regardless of the product catalogue.
 const STATIC_PATHS = [
+  "/home",
   "/shop",
   "/about",
   "/privacy-policy",
