@@ -101,7 +101,7 @@ export default function Header({ onMenuOpenChange }) {
           </span>
         </button>
 
-        <Link to="/" className={styles.brand} aria-label="Appealing Apparels home">
+        <Link to="/shop" className={styles.brand} aria-label="Appealing Apparels home">
           <span className={styles.brandText}>
             <span className={styles.brandWord}>Appealing</span>
             <span className={styles.brandWord}>Apparels</span>

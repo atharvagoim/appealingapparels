@@ -41,7 +41,7 @@ function TopBar({ isHome }) {
  */
 export default function Layout() {
   const { pathname } = useLocation();
-  const isHome = pathname === "/";
+  const isHome = pathname === "/shop";
 
   return (
     <>

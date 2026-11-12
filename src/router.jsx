@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import Layout from "./components/Layout";
-import Home from "./pages/Home";
 import ErrorPage from "./pages/ErrorPage";
 
 /**
@@ -66,7 +65,7 @@ export const router = createBrowserRouter([
     // than React Router's developer stack trace.
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <Home /> },
+      { index: true, element: <Navigate to="/shop" replace /> },
       { path: "shop", element: withSuspense(<Shop />) },
       { path: "product/:slug", element: withSuspense(<Product />) },
       { path: "cart", element: withSuspense(<Cart />) },
